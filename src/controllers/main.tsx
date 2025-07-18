@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import HeadgearToModel, { HeadgearModel } from "@/models/get-headgear";
 import GarmentToModel, { GarmentModel } from "@/models/get-garment";
 
@@ -32,11 +32,23 @@ const MainController = () => {
     const character = useStore((x) => x.character);
     const setCharacterUrl = useStore((x) => x.update_char_url);
 
+    const hasHydrated = useStore((x) => x._hasHydrated);
+    const hasBeenInitialized = useRef<boolean>(false);
+
     useEffect(() => {
         loadHeadgearData();
         loadGarmentData();
-        postRenderData();
     }, []);
+
+    useEffect(() => {
+        if(!hasHydrated || hasBeenInitialized.current){
+            return;
+        }
+        else {
+            postRenderData();
+            hasBeenInitialized.current = true;
+        }
+    }, [hasHydrated, character]);
 
     const updateModel = (partialModel: | Partial<Model> | ((model: Partial<Model> | undefined) => Partial<Model>)) => {
         setModel((prev) => {

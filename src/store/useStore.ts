@@ -22,6 +22,7 @@ export type Character = {
 };
 
 export type State = {
+    _hasHydrated: boolean;
     character_url: string | null;
     character: Character;
     headgear_upper: HeadgearModel | null;
@@ -55,6 +56,7 @@ export type State = {
 };
 
 export const initialState = {
+    _hasHydrated: false,
     character_url: null,
     character: {
         gender: 1,
@@ -706,6 +708,11 @@ export const useStore = create<State>()(
         }),
         {
             name: 'character-storage',
+            onRehydrateStorage: () => (state) => {
+                if(state){
+                    state._hasHydrated = true;
+                }
+            },
             partialize: (state) => {
                 // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 const { character_url, ...rest } = state;
