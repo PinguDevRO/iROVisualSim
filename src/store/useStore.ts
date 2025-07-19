@@ -94,9 +94,17 @@ export const useStore = create<State>()(
             update_char_job: async (job: string[]) => {
                 const cash_mount = get().cash_mount_checked;
                 const regular_mount = get().regular_mount_checked;
+                const newJob = parseInt(job[0]);
+
+                if([20, 4021, 4069, 4264, 4212, 4305].indexOf(newJob) >= 0){ // Female class only
+                    set((state) => ({ character: { ...state.character, gender: 0 } }));
+                }
+
+                if([19, 4020, 4068, 4263, 4211, 4304].indexOf(newJob) >= 0){ // Male class only
+                    set((state) => ({ character: { ...state.character, gender: 1 } }));
+                }
 
                 if(cash_mount === 1){
-                    const newJob = parseInt(job[0]);
                     let found = false;
                     for (const [strKey, val] of Object.entries(cash_mount_list)) {
                         const key = Number(strKey);
@@ -112,7 +120,6 @@ export const useStore = create<State>()(
                 }
 
                 else if(regular_mount === 1){
-                    const newJob = parseInt(job[0]);
                     let found = false;
                     for (const [strKey, val] of Object.entries(regular_mount_list)) {
                         const key = Number(strKey);
