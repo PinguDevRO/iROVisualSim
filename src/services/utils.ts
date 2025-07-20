@@ -32,7 +32,7 @@ export const AxiosGet = async <T = unknown>(
             headers: getHeaders(),
             params: stringify(params),
             validateStatus: () => true,
-            timeout: 6000
+            timeout: 60000
         };
     };
 
@@ -60,7 +60,7 @@ export const AxiosPost = async <T = unknown>(
         return {
             headers: getHeaders(),
             validateStatus: () => true,
-            timeout: 6000
+            timeout: 60000
         };
     };
 
@@ -90,7 +90,7 @@ export const AxiosImage = async (
                 "Content-Type": "application/vnd.api+json",
             },
             validateStatus: () => true,
-            timeout: 6000,
+            timeout: 60000,
             responseType: "blob",
         };
     };

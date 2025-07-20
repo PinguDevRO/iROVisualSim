@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import Box from '@mui/material/Box';
+import CharacterZoomLens from './CharacterZoomLens';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import BodyColorList from './BodyColorList';
@@ -78,14 +79,7 @@ const Character = () => {
                 </Typography>
                 <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" width={200} height={200} margin={1}>
                     {character !== null ? (
-                        <Image
-                            src={character}
-                            alt={'Ragnarok Character'}
-                            width={200}
-                            height={200}
-                            draggable={false}
-                            loading="lazy"
-                        />
+                        <CharacterZoomLens imageUrl={character} />
                     ) : (
                         <Image
                             src={'/poring.png'}
