@@ -347,6 +347,9 @@ export const expanded_fourth_job = [
         id: 4308,
         name: "Spirit Handler",
     },
+];
+
+export const special_job = [
     {
         id: 22,
         name: "Wedding",

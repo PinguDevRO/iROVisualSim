@@ -30,8 +30,8 @@ const HairColorList = () => {
                 flexWrap="wrap"
                 alignItems="center"
                 justifyContent="center"
-                border="2px solid #d8d8d8 !important"
-                borderRadius={2}
+                border="1px solid #d8d8d8 !important"
+                borderRadius={1}
             >
                 {haircolors.map((x, idx) => (
                     <IconButton

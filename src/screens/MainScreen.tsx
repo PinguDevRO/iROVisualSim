@@ -8,10 +8,8 @@ import {
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Loading from '@/components/Loading/Loading';
-import JobTable from '@/components/JobTable/JobTable';
 import ItemSection from '@/components/ItemSection/ItemSection';
 import CharacterSection from '@/components/CharacterSection/CharacterSection';
-import MiscSection from '@/components/MiscSection/MiscSection';
 import { COLORS } from "@/theme/colors";
 
 const MainScreen = ({
@@ -52,20 +50,6 @@ const MainScreen = ({
                     maxWidth: 700
                 }}
             >
-                <JobTable />
-            </Paper>
-            <Paper
-                elevation={3}
-                sx={{
-                    display: 'flex',
-                    padding: 2,
-                    borderRadius: 2,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    minWidth: 0,
-                    maxWidth: 700
-                }}
-            >
                 <CharacterSection />
             </Paper>
             <Paper
@@ -85,20 +69,6 @@ const MainScreen = ({
                 ) : (
                     <ItemSection headgearData={model?.headgearData} garmentData={model?.garmentData} />
                 )}
-            </Paper>
-            <Paper
-                elevation={3}
-                sx={{
-                    display: 'flex',
-                    padding: 2,
-                    borderRadius: 2,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    minWidth: 0,
-                    maxWidth: 700
-                }}
-            >
-                <MiscSection />
             </Paper>
         </Box>
     )

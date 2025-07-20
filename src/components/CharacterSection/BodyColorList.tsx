@@ -1,12 +1,22 @@
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
-import { body_palette_list } from '@/constants/bodypalette';
+import Tooltip from '@mui/material/Tooltip';
+import {
+    first_job_body_palette_list,
+    regular_job_body_palette_list,
+    third_fourth_job_body_palette_list,
+    first_job_palette_list,
+    regular_job_palette_list,
+    third_fourth_job_palette_list
+} from '@/constants/bodypalette';
+import { COLORS } from '@/theme/colors';
 import { useStore } from "@/store/useStore";
 
 
 const BodyColorList = () => {
 
+    const currentJob = parseInt(useStore((x) => x.character.job)[0]);
     const selectedBodyColor = useStore((x) => x.character.bodyPalette);
     const setSelectedBodyColor = useStore((x) => x.update_char_bodyPalette);
 
@@ -22,7 +32,7 @@ const BodyColorList = () => {
                 alignItems="center"
                 justifyContent="center"
             >
-                {body_palette_list.map((x, idx) => (
+                {first_job_palette_list.indexOf(currentJob) >= 0 && first_job_body_palette_list.map((x, idx) => (
                     <IconButton
                         key={`body-color-${x.id}-${idx}`}
                         onClick={() => setSelectedBodyColor(x.id)}
@@ -32,24 +42,123 @@ const BodyColorList = () => {
                             },
                         }}
                     >
-                        <Box
-                            display="flex"
-                            flexDirection="column"
-                            alignItems="center"
-                            justifyContent="center"
-                            width={30}
-                            height={30}
-                            sx={{
-                                backgroundColor: x.id === selectedBodyColor ? '#fff495' : 'inherit',
-                                border: "1px solid #b8c4dc !important",
-                                borderRadius: 1,
-                                '&:hover': {
-                                    border: "1px solid #fff495 !important",
+                        <Tooltip
+                            slotProps={{
+                                tooltip: {
+                                    sx: {
+                                        color: COLORS.primary_background_text,
+                                        backgroundColor: COLORS.primary_background,
+                                        borderRadius: 2,
+                                    },
                                 },
                             }}
+                            title={x.name}
                         >
-                            {x.id}
-                        </Box>
+                            <Box
+                                display="flex"
+                                flexDirection="column"
+                                alignItems="center"
+                                justifyContent="center"
+                                width={30}
+                                height={30}
+                                sx={{
+                                    backgroundColor: x.id === selectedBodyColor ? '#fff495' : 'inherit',
+                                    border: "1px solid #b8c4dc !important",
+                                    borderRadius: 1,
+                                    '&:hover': {
+                                        border: "1px solid #fff495 !important",
+                                    },
+                                }}
+                            >
+                                {x.visual}
+                            </Box>
+                        </Tooltip>
+                    </IconButton>
+                ))}
+                {regular_job_palette_list.indexOf(currentJob) >= 0 && regular_job_body_palette_list.map((x, idx) => (
+                    <IconButton
+                        key={`body-color-${x.id}-${idx}`}
+                        onClick={() => setSelectedBodyColor(x.id)}
+                        sx={{
+                            '&:hover': {
+                                backgroundColor: 'transparent',
+                            },
+                        }}
+                    >
+                        <Tooltip
+                            slotProps={{
+                                tooltip: {
+                                    sx: {
+                                        color: COLORS.primary_background_text,
+                                        backgroundColor: COLORS.primary_background,
+                                        borderRadius: 2,
+                                    },
+                                },
+                            }}
+                            title={x.name}
+                        >
+                            <Box
+                                display="flex"
+                                flexDirection="column"
+                                alignItems="center"
+                                justifyContent="center"
+                                width={30}
+                                height={30}
+                                sx={{
+                                    backgroundColor: x.id === selectedBodyColor ? '#fff495' : 'inherit',
+                                    border: "1px solid #b8c4dc !important",
+                                    borderRadius: 1,
+                                    '&:hover': {
+                                        border: "1px solid #fff495 !important",
+                                    },
+                                }}
+                            >
+                                {x.visual}
+                            </Box>
+                        </Tooltip>
+                    </IconButton>
+                ))}
+                {third_fourth_job_palette_list.indexOf(currentJob) >= 0 && third_fourth_job_body_palette_list.map((x, idx) => (
+                    <IconButton
+                        key={`body-color-${x.id}-${idx}`}
+                        onClick={() => setSelectedBodyColor(x.id)}
+                        sx={{
+                            '&:hover': {
+                                backgroundColor: 'transparent',
+                            },
+                        }}
+                    >
+                        <Tooltip
+                            slotProps={{
+                                tooltip: {
+                                    sx: {
+                                        color: COLORS.primary_background_text,
+                                        backgroundColor: COLORS.primary_background,
+                                        borderRadius: 2,
+                                    },
+                                },
+                            }}
+                            title={x.name}
+                        >
+                            <Box
+                                display="flex"
+                                flexDirection="column"
+                                alignItems="center"
+                                justifyContent="center"
+                                width={30}
+                                height={30}
+                                sx={{
+                                    backgroundColor: x.id === selectedBodyColor ? '#fff495' : 'inherit',
+                                    border: "1px solid #b8c4dc !important",
+                                    borderRadius: 1,
+                                    '&:hover': {
+                                        border: "1px solid #fff495 !important",
+                                    },
+                                }}
+                            >
+                                {x.visual}
+                            </Box>
+                        </Tooltip>
                     </IconButton>
                 ))}
             </Box>

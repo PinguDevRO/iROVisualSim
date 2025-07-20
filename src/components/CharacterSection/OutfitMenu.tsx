@@ -33,11 +33,10 @@ const OutfitMenuList = () => {
     return (
         <Box
             display="flex"
-            flexDirection="column"
+            flexDirection="row"
             flex={1}
             alignItems="start"
             justifyContent="center"
-            gap={3}
         >
             <FormGroup>
                 <Typography variant="body2" fontWeight={700} component="span" align="left">

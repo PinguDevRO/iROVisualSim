@@ -24,8 +24,8 @@ const HairStyleList = () => {
                 alignItems="center"
                 justifyContent="center"
                 flexWrap="wrap"
-                border="2px solid #d8d8d8 !important"
-                borderRadius={2}
+                border="1px solid #d8d8d8 !important"
+                borderRadius={1}
             >
                 {selectedGender === 1 && (selectedJob !== '4218' && selectedJob !== '4308') ?
                     headlist.human_male.map((x) => (

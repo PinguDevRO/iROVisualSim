@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Box from '@mui/material/Box';
+import Tooltip from '@mui/material/Tooltip';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
@@ -108,29 +109,42 @@ const ItemSection = ({
                         },
                     }}
                 >
-                    <Box display="flex" flexDirection="column" alignItems="center" justifyContent="start">
-                        <Typography
-                            variant="body2"
-                            component="label"
-                            sx={{
-                                p: 0.5,
-                                borderRadius: 2,
-                                fontWeight: 700,
-                            }}
-                        >
-                            UPPER
-                        </Typography>
-                        <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" width={24} height={24}>
-                            <Image
-                                src={upperHeadgear !== null ? `https://db.irowiki.org/image/item/${upperHeadgear.itemId}.png` : '/interface/forbidden_item.png'}
-                                alt={"test"}
-                                width={24}
-                                height={24}
-                                draggable={false}
-                                loading="lazy"
-                            />
+                    <Tooltip
+                        slotProps={{
+                            tooltip: {
+                                sx: {
+                                    color: COLORS.primary_background_text,
+                                    backgroundColor: COLORS.primary_background,
+                                    borderRadius: 2,
+                                },
+                            },
+                        }}
+                        title={upperHeadgear !== null ? `${upperHeadgear.name} (ID: ${upperHeadgear.itemId})` : 'No Upper Headgear selected'}
+                    >
+                        <Box display="flex" flexDirection="column" alignItems="center" justifyContent="start">
+                            <Typography
+                                variant="body2"
+                                component="label"
+                                sx={{
+                                    p: 0.5,
+                                    borderRadius: 2,
+                                    fontWeight: 700,
+                                }}
+                            >
+                                UPPER
+                            </Typography>
+                            <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" width={24} height={24}>
+                                <Image
+                                    src={upperHeadgear !== null ? `https://db.irowiki.org/image/item/${upperHeadgear.itemId}.png` : '/interface/forbidden_item.png'}
+                                    alt={"test"}
+                                    width={24}
+                                    height={24}
+                                    draggable={false}
+                                    loading="lazy"
+                                />
+                            </Box>
                         </Box>
-                    </Box>
+                    </Tooltip>
                 </Button>
                 <Button
                     onClick={() => setSelected("Middle")}
@@ -147,25 +161,38 @@ const ItemSection = ({
                         },
                     }}
                 >
-                    <Box display="flex" flexDirection="column" alignItems="center" justifyContent="start">
-                        <Typography
-                            variant="body2"
-                            component="label"
-                            sx={{ p: 0.5, borderRadius: 2, fontWeight: 700 }}
-                        >
-                            MIDDLE
-                        </Typography>
-                        <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" width={24} height={24}>
-                            <Image
-                                src={middleHeadgear !== null ? `https://db.irowiki.org/image/item/${middleHeadgear.itemId}.png` : '/interface/forbidden_item.png'}
-                                alt={"test"}
-                                width={24}
-                                height={24}
-                                draggable={false}
-                                loading="lazy"
-                            />
+                    <Tooltip
+                        slotProps={{
+                            tooltip: {
+                                sx: {
+                                    color: COLORS.primary_background_text,
+                                    backgroundColor: COLORS.primary_background,
+                                    borderRadius: 2,
+                                },
+                            },
+                        }}
+                        title={middleHeadgear !== null ? `${middleHeadgear.name} (ID: ${middleHeadgear.itemId})` : 'No Middle Headgear selected'}
+                    >
+                        <Box display="flex" flexDirection="column" alignItems="center" justifyContent="start">
+                            <Typography
+                                variant="body2"
+                                component="label"
+                                sx={{ p: 0.5, borderRadius: 2, fontWeight: 700 }}
+                            >
+                                MIDDLE
+                            </Typography>
+                            <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" width={24} height={24}>
+                                <Image
+                                    src={middleHeadgear !== null ? `https://db.irowiki.org/image/item/${middleHeadgear.itemId}.png` : '/interface/forbidden_item.png'}
+                                    alt={"test"}
+                                    width={24}
+                                    height={24}
+                                    draggable={false}
+                                    loading="lazy"
+                                />
+                            </Box>
                         </Box>
-                    </Box>
+                    </Tooltip>
                 </Button>
                 <Button
                     onClick={() => setSelected("Lower")}
@@ -182,25 +209,38 @@ const ItemSection = ({
                         },
                     }}
                 >
-                    <Box display="flex" flexDirection="column" alignItems="center" justifyContent="start">
-                        <Typography
-                            variant="body2"
-                            component="label"
-                            sx={{ p: 0.5, borderRadius: 2, fontWeight: 700 }}
-                        >
-                            LOWER
-                        </Typography>
-                        <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" width={24} height={24}>
-                            <Image
-                                src={lowerHeadgear !== null ? `https://db.irowiki.org/image/item/${lowerHeadgear.itemId}.png` : '/interface/forbidden_item.png'}
-                                alt={"test"}
-                                width={24}
-                                height={24}
-                                draggable={false}
-                                loading="lazy"
-                            />
+                    <Tooltip
+                        slotProps={{
+                            tooltip: {
+                                sx: {
+                                    color: COLORS.primary_background_text,
+                                    backgroundColor: COLORS.primary_background,
+                                    borderRadius: 2,
+                                },
+                            },
+                        }}
+                        title={lowerHeadgear !== null ? `${lowerHeadgear.name} (ID: ${lowerHeadgear.itemId})` : 'No Lower Headgear selected'}
+                    >
+                        <Box display="flex" flexDirection="column" alignItems="center" justifyContent="start">
+                            <Typography
+                                variant="body2"
+                                component="label"
+                                sx={{ p: 0.5, borderRadius: 2, fontWeight: 700 }}
+                            >
+                                LOWER
+                            </Typography>
+                            <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" width={24} height={24}>
+                                <Image
+                                    src={lowerHeadgear !== null ? `https://db.irowiki.org/image/item/${lowerHeadgear.itemId}.png` : '/interface/forbidden_item.png'}
+                                    alt={"test"}
+                                    width={24}
+                                    height={24}
+                                    draggable={false}
+                                    loading="lazy"
+                                />
+                            </Box>
                         </Box>
-                    </Box>
+                    </Tooltip>
                 </Button>
                 <Button
                     onClick={() => setSelected("Garment")}
@@ -217,25 +257,38 @@ const ItemSection = ({
                         },
                     }}
                 >
-                    <Box display="flex" flexDirection="column" alignItems="center" justifyContent="start">
-                        <Typography
-                            variant="body2"
-                            component="label"
-                            sx={{ p: 0.5, borderRadius: 2, fontWeight: 700 }}
-                        >
-                            GARMENT
-                        </Typography>
-                        <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" width={24} height={24}>
-                            <Image
-                                src={garment !== null ? `https://db.irowiki.org/image/item/${garment.itemId}.png` : '/interface/forbidden_item.png'}
-                                alt={"test"}
-                                width={24}
-                                height={24}
-                                draggable={false}
-                                loading="lazy"
-                            />
+                    <Tooltip
+                        slotProps={{
+                            tooltip: {
+                                sx: {
+                                    color: COLORS.primary_background_text,
+                                    backgroundColor: COLORS.primary_background,
+                                    borderRadius: 2,
+                                },
+                            },
+                        }}
+                        title={garment !== null ? `${garment.name} (ID: ${garment.itemId})` : 'No Garment selected'}
+                    >
+                        <Box display="flex" flexDirection="column" alignItems="center" justifyContent="start">
+                            <Typography
+                                variant="body2"
+                                component="label"
+                                sx={{ p: 0.5, borderRadius: 2, fontWeight: 700 }}
+                            >
+                                GARMENT
+                            </Typography>
+                            <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" width={24} height={24}>
+                                <Image
+                                    src={garment !== null ? `https://db.irowiki.org/image/item/${garment.itemId}.png` : '/interface/forbidden_item.png'}
+                                    alt={"test"}
+                                    width={24}
+                                    height={24}
+                                    draggable={false}
+                                    loading="lazy"
+                                />
+                            </Box>
                         </Box>
-                    </Box>
+                    </Tooltip>
                 </Button>
             </Box>
             {selected === "Upper" ? (
