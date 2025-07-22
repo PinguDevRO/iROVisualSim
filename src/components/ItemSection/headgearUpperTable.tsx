@@ -47,7 +47,7 @@ const HeadgearUpperTable = ({
                             display: 'flex',
                             justifyContent: 'center',
                             alignItems: 'center',
-                            backgroundColor: selectedUpper?.accessoryId === x.accessoryId ? '#fff495' : 'inherit',
+                            backgroundColor: selectedUpper?.accessoryId === x.accessoryId && selectedUpper?.itemId === x.itemId ? '#fff495' : 'inherit',
                             border: '1px solid #b8c4dc',
                             borderRadius: 1,
                             '&:hover': {

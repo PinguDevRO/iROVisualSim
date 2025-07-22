@@ -50,7 +50,7 @@ const HairStyleList = () => {
                                     border: "1px solid #b8c4dc !important",
                                     borderRadius: 1,
                                     '&:hover': {
-                                        border: "1px solid #fff495 !important",
+                                        border: "1px solid #515789 !important",
                                     },
                                 }}
                             >
@@ -87,7 +87,7 @@ const HairStyleList = () => {
                                         border: "1px solid #b8c4dc !important",
                                         borderRadius: 1,
                                         '&:hover': {
-                                            border: "1px solid #fff495 !important",
+                                            border: "1px solid #515789 !important",
                                         },
                                     }}
                                 >
@@ -124,7 +124,7 @@ const HairStyleList = () => {
                                             border: "1px solid #b8c4dc !important",
                                             borderRadius: 1,
                                             '&:hover': {
-                                                border: "1px solid #fff495 !important",
+                                                border: "1px solid #515789 !important",
                                             },
                                         }}
                                     >
@@ -161,7 +161,7 @@ const HairStyleList = () => {
                                                 border: "1px solid #b8c4dc !important",
                                                 borderRadius: 1,
                                                 '&:hover': {
-                                                    border: "1px solid #fff495 !important",
+                                                    border: "1px solid #515789 !important",
                                                 },
                                             }}
                                         >

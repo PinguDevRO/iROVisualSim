@@ -42,7 +42,7 @@ const GarmentTable = ({
                             display: 'flex',
                             justifyContent: 'center',
                             alignItems: 'center',
-                            backgroundColor: selectedGarment?.garmentId === x.garmentId ? '#fff495' : 'inherit',
+                            backgroundColor: selectedGarment?.garmentId === x.garmentId && selectedGarment?.itemId === x.itemId ? '#fff495' : 'inherit',
                             border: '1px solid #b8c4dc',
                             borderRadius: 1,
                             '&:hover': {

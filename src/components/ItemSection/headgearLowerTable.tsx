@@ -48,7 +48,7 @@ const HeadgearLowerTable = ({
                             display: 'flex',
                             justifyContent: 'center',
                             alignItems: 'center',
-                            backgroundColor: selectedLower?.accessoryId === x.accessoryId ? '#fff495' : 'inherit',
+                            backgroundColor: selectedLower?.accessoryId === x.accessoryId && selectedLower?.itemId === x.itemId ? '#fff495' : 'inherit',
                             border: '1px solid #b8c4dc',
                             borderRadius: 1,
                             '&:hover': {
