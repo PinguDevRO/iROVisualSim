@@ -166,7 +166,7 @@ const HairStyleList = () => {
                                             }}
                                         >
                                             <Image
-                                                src={`/head/img_hairstyle_doramgirl${x}`}
+                                                src={`/head/img_hairstyle_doramgirl${x}.png`}
                                                 alt={x}
                                                 width={36}
                                                 height={37}

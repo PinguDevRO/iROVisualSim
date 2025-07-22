@@ -27,7 +27,7 @@ const CharacterZoomLens = ({
         const clampedX = Math.max(0, Math.min(x, rect.width));
         const clampedY = Math.max(0, Math.min(y, rect.height));
 
-        zoom.style.backgroundPosition = `-${(clampedX * scale - zoomWidth / 2) + 10}px -${(clampedY * scale - zoomHeight / 2) + 10}px`;
+        zoom.style.backgroundPosition = `-${(clampedX * scale - zoomWidth / 2) - clampedX}px -${(clampedY * scale - zoomHeight / 2) - clampedY}px`;
     };
 
     return (
