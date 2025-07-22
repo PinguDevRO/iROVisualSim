@@ -1,11 +1,14 @@
 import { AxiosGet, AxiosResponse } from "./utils";
 
-export interface GetHeadgearResponse {
+export interface GetHeadgearItemList {
     item_id: number;
-    accessory_id: number;
     name: string;
+};
+export interface GetHeadgearResponse {
+    accessory_id: number;
     location: number;
-}
+    items: GetHeadgearItemList[];
+};
 
 const GetHeadgears = async (): Promise<GetHeadgearResponse[] |  null> => {
     const url = process.env.NEXT_PUBLIC_IROWIKI_HEADGEAR_METADATA_URL ? process.env.NEXT_PUBLIC_IROWIKI_HEADGEAR_METADATA_URL : "";

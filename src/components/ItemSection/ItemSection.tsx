@@ -130,7 +130,17 @@ const ItemSection = ({
                                     },
                                 },
                             }}
-                            title={upperHeadgear !== null ? `${upperHeadgear.name} (ID: ${upperHeadgear.itemId})` : 'No Upper Headgear selected'}
+                            title={upperHeadgear !== null && upperHeadgear.items && upperHeadgear.items.length > 0 ? (
+                                <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
+                                    {upperHeadgear.items.map((x) => (
+                                        <span
+                                            key={`tooltip-selected-upper-text--${x.name}-${x.itemId}`}
+                                        >
+                                            {x.name} (ID: {x.itemId})
+                                        </span>
+                                    ))}
+                                </Box>
+                            ) : 'No Upper Headgear selected'}
                         >
                             <Box display="flex" flexDirection="column" alignItems="center" justifyContent="start">
                                 <Typography
@@ -142,8 +152,8 @@ const ItemSection = ({
                                 </Typography>
                                 <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" width={24} height={24}>
                                     <Image
-                                        src={upperHeadgear !== null ? `https://db.irowiki.org/image/item/${upperHeadgear.itemId}.png` : '/interface/forbidden_item.png'}
-                                        alt={"test"}
+                                        src={upperHeadgear !== null && upperHeadgear.items && upperHeadgear.items.length > 0 ? `https://db.irowiki.org/image/item/${upperHeadgear.items[0].itemId}.png` : '/interface/forbidden_item.png'}
+                                        alt={"Upper"}
                                         width={24}
                                         height={24}
                                         draggable={false}
@@ -212,7 +222,17 @@ const ItemSection = ({
                                     },
                                 },
                             }}
-                            title={middleHeadgear !== null ? `${middleHeadgear.name} (ID: ${middleHeadgear.itemId})` : 'No Middle Headgear selected'}
+                            title={middleHeadgear !== null && middleHeadgear.items && middleHeadgear.items.length > 0 ? (
+                                <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
+                                    {middleHeadgear.items.map((x) => (
+                                        <span
+                                            key={`tooltip-selected-middle-text--${x.name}-${x.itemId}`}
+                                        >
+                                            {x.name} (ID: {x.itemId})
+                                        </span>
+                                    ))}
+                                </Box>
+                            ) : 'No Middle Headgear selected'}
                         >
                             <Box display="flex" flexDirection="column" alignItems="center" justifyContent="start">
                                 <Typography
@@ -224,8 +244,8 @@ const ItemSection = ({
                                 </Typography>
                                 <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" width={24} height={24}>
                                     <Image
-                                        src={middleHeadgear !== null ? `https://db.irowiki.org/image/item/${middleHeadgear.itemId}.png` : '/interface/forbidden_item.png'}
-                                        alt={"test"}
+                                        src={middleHeadgear !== null && middleHeadgear.items && middleHeadgear.items.length > 0 ? `https://db.irowiki.org/image/item/${middleHeadgear.items[0].itemId}.png` : '/interface/forbidden_item.png'}
+                                        alt={"Middle"}
                                         width={24}
                                         height={24}
                                         draggable={false}
@@ -294,7 +314,17 @@ const ItemSection = ({
                                     },
                                 },
                             }}
-                            title={lowerHeadgear !== null ? `${lowerHeadgear.name} (ID: ${lowerHeadgear.itemId})` : 'No Lower Headgear selected'}
+                            title={lowerHeadgear !== null && lowerHeadgear.items && lowerHeadgear.items.length > 0 ? (
+                                <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
+                                    {lowerHeadgear.items.map((x) => (
+                                        <span
+                                            key={`tooltip-selected-lower-text--${x.name}-${x.itemId}`}
+                                        >
+                                            {x.name} (ID: {x.itemId})
+                                        </span>
+                                    ))}
+                                </Box>
+                            ) : 'No Lower Headgear selected'}
                         >
                             <Box display="flex" flexDirection="column" alignItems="center" justifyContent="start">
                                 <Typography
@@ -306,8 +336,8 @@ const ItemSection = ({
                                 </Typography>
                                 <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" width={24} height={24}>
                                     <Image
-                                        src={lowerHeadgear !== null ? `https://db.irowiki.org/image/item/${lowerHeadgear.itemId}.png` : '/interface/forbidden_item.png'}
-                                        alt={"test"}
+                                        src={lowerHeadgear !== null && lowerHeadgear.items && lowerHeadgear.items.length > 0 ? `https://db.irowiki.org/image/item/${lowerHeadgear.items[0].itemId}.png` : '/interface/forbidden_item.png'}
+                                        alt={"Lower"}
                                         width={24}
                                         height={24}
                                         draggable={false}
@@ -376,7 +406,17 @@ const ItemSection = ({
                                     },
                                 },
                             }}
-                            title={garment !== null ? `${garment.name} (ID: ${garment.itemId})` : 'No Garment selected'}
+                            title={garment !== null && garment.items && garment.items.length > 0 ? (
+                                <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
+                                    {garment.items.map((x) => (
+                                        <span
+                                            key={`tooltip-selected-garment-text--${x.name}-${x.itemId}`}
+                                        >
+                                            {x.name} (ID: {x.itemId})
+                                        </span>
+                                    ))}
+                                </Box>
+                            ) : 'No Garment selected'}
                         >
                             <Box display="flex" flexDirection="column" alignItems="center" justifyContent="start">
                                 <Typography
@@ -388,8 +428,8 @@ const ItemSection = ({
                                 </Typography>
                                 <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" width={24} height={24}>
                                     <Image
-                                        src={garment !== null ? `https://db.irowiki.org/image/item/${garment.itemId}.png` : '/interface/forbidden_item.png'}
-                                        alt={"test"}
+                                        src={garment !== null && garment.items && garment.items.length > 0 ? `https://db.irowiki.org/image/item/${garment.items[0].itemId}.png` : '/interface/forbidden_item.png'}
+                                        alt={"Garment"}
                                         width={24}
                                         height={24}
                                         draggable={false}

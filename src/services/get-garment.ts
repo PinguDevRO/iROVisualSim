@@ -1,9 +1,12 @@
 import { AxiosGet, AxiosResponse } from "./utils";
 
-export interface GetGarmentResponse {
+export interface GetGarmentItemList {
     item_id: number;
-    garment_id: number;
     name: string;
+}
+export interface GetGarmentResponse {
+    garment_id: number;
+    items: GetGarmentItemList[];
 }
 
 const GetGarments = async (): Promise<GetGarmentResponse[] |  null> => {

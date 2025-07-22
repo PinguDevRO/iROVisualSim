@@ -20,7 +20,9 @@ const GarmentTable = ({
         if (!garmentData) return [];
         if (!queryFilter) return garmentData;
         return garmentData.filter(x =>
-            x.name.toLowerCase().includes(queryFilter.toLowerCase())
+            x.items.some((y) =>
+                    y.name.toLowerCase().includes(queryFilter.toLowerCase())
+            )
         );
     }, [garmentData, queryFilter]);
 
@@ -33,7 +35,7 @@ const GarmentTable = ({
                 const x = filteredData[index];
                 return (
                     <Box
-                        key={`garment-${x.itemId}-${index}`}
+                        key={`garment-${x.garmentId}-${index}`}
                         onClick={() => setCharGarment(x)}
                         sx={{
                             width: 40,
@@ -42,7 +44,7 @@ const GarmentTable = ({
                             display: 'flex',
                             justifyContent: 'center',
                             alignItems: 'center',
-                            backgroundColor: selectedGarment?.garmentId === x.garmentId && selectedGarment?.itemId === x.itemId ? '#fff495' : 'inherit',
+                            backgroundColor: selectedGarment?.garmentId === x.garmentId ? '#fff495' : 'inherit',
                             border: '1px solid #b8c4dc',
                             borderRadius: 1,
                             '&:hover': {
@@ -50,7 +52,7 @@ const GarmentTable = ({
                             },
                         }}
                     >
-                        <ItemTooltip itemId={x.itemId} itemName={x.name} />
+                        <ItemTooltip itemList={x.items} />
                     </Box>
                 );
             }}

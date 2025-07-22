@@ -19,13 +19,17 @@ const HeadgearUpperTable = ({
     const filterValues = headgearList["Upper"];
     const filteredData = useMemo(() => {
         if (!headgearData) return [];
+
         if (!queryFilter) {
             return headgearData.filter((x) => filterValues.includes(x.location));
         }
+
         return headgearData.filter(
             (x) =>
                 filterValues.includes(x.location) &&
-                x.name.toLowerCase().includes(queryFilter.toLowerCase())
+                x.items.some((y) =>
+                    y.name.toLowerCase().includes(queryFilter.toLowerCase())
+                )
         );
     }, [headgearData, queryFilter, filterValues]);
 
@@ -38,7 +42,7 @@ const HeadgearUpperTable = ({
                 const x = filteredData[index];
                 return (
                     <Box
-                        key={`headgear-upper-${x.itemId}-${index}`}
+                        key={`headgear-upper-${x.accessoryId}-${index}`}
                         onClick={() => setSelectedHeadgear(x)}
                         sx={{
                             width: 40,
@@ -47,7 +51,7 @@ const HeadgearUpperTable = ({
                             display: 'flex',
                             justifyContent: 'center',
                             alignItems: 'center',
-                            backgroundColor: selectedUpper?.accessoryId === x.accessoryId && selectedUpper?.itemId === x.itemId ? '#fff495' : 'inherit',
+                            backgroundColor: selectedUpper?.accessoryId === x.accessoryId && selectedUpper?.location === x.location ? '#fff495' : 'inherit',
                             border: '1px solid #b8c4dc',
                             borderRadius: 1,
                             '&:hover': {
@@ -55,7 +59,7 @@ const HeadgearUpperTable = ({
                             },
                         }}
                     >
-                        <ItemTooltip itemId={x.itemId} itemName={x.name} />
+                        <ItemTooltip itemList={x.items} />
                     </Box>
                 );
             }}
