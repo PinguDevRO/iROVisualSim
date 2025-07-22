@@ -33,6 +33,10 @@ const ItemSection = ({
     const middleHeadgear = useStore((x) => x.headgear_middle);
     const lowerHeadgear = useStore((x) => x.headgear_lower);
     const garment = useStore((x) => x.garment);
+    const resetUpperHeadgear = useStore((x) => x.reset_upper_headgear);
+    const resetMiddleHeadgear = useStore((x) => x.reset_middle_headgear);
+    const resetLowerHeadgear = useStore((x) => x.reset_lower_headgear);
+    const resetGarment = useStore((x) => x.reset_garment);
 
     useEffect(() => {
         const handler = setTimeout(() => {
@@ -94,202 +98,334 @@ const ItemSection = ({
                 alignItems="center"
                 justifyContent="space-between"
             >
-                <Button
-                    onClick={() => setSelected("Upper")}
-                    sx={{
-                        minWidth: 110,
-                        maxWidth: 200,
-                        padding: 1,
-                        margin: 2,
-                        backgroundColor: selected === "Upper" ? '#fff495' : 'inherit',
-                        border: '1px solid #b8c4dc',
-                        borderRadius: 1,
-                        '&:hover': {
-                            border: '1px solid #fff495',
-                        },
-                    }}
+                <Box
+                    display="flex"
+                    flexDirection="column"
+                    alignItems="center"
+                    flex={1}
+                    gap={1}
+                    padding={2}
                 >
-                    <Tooltip
-                        slotProps={{
-                            tooltip: {
-                                sx: {
-                                    color: COLORS.primary_background_text,
-                                    backgroundColor: COLORS.primary_background,
-                                    borderRadius: 2,
-                                },
+                    <Button
+                        onClick={() => setSelected("Upper")}
+                        sx={{
+                            minWidth: 110,
+                            maxWidth: 200,
+                            padding: 1,
+                            backgroundColor: selected === "Upper" ? '#fff495' : 'inherit',
+                            border: '1px solid #b8c4dc',
+                            borderRadius: 1,
+                            '&:hover': {
+                                border: '1px solid #fff495',
                             },
                         }}
-                        title={upperHeadgear !== null ? `${upperHeadgear.name} (ID: ${upperHeadgear.itemId})` : 'No Upper Headgear selected'}
                     >
-                        <Box display="flex" flexDirection="column" alignItems="center" justifyContent="start">
-                            <Typography
-                                variant="body2"
-                                component="label"
-                                sx={{
-                                    p: 0.5,
-                                    borderRadius: 2,
-                                    fontWeight: 700,
-                                }}
-                            >
-                                UPPER
-                            </Typography>
-                            <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" width={24} height={24}>
-                                <Image
-                                    src={upperHeadgear !== null ? `https://db.irowiki.org/image/item/${upperHeadgear.itemId}.png` : '/interface/forbidden_item.png'}
-                                    alt={"test"}
-                                    width={24}
-                                    height={24}
-                                    draggable={false}
-                                    loading="lazy"
-                                />
-                            </Box>
-                        </Box>
-                    </Tooltip>
-                </Button>
-                <Button
-                    onClick={() => setSelected("Middle")}
-                    sx={{
-                        minWidth: 110,
-                        maxWidth: 200,
-                        padding: 1,
-                        margin: 2,
-                        backgroundColor: selected === "Middle" ? '#fff495' : 'inherit',
-                        border: '1px solid #b8c4dc',
-                        borderRadius: 1,
-                        '&:hover': {
-                            border: '1px solid #fff495',
-                        },
-                    }}
-                >
-                    <Tooltip
-                        slotProps={{
-                            tooltip: {
-                                sx: {
-                                    color: COLORS.primary_background_text,
-                                    backgroundColor: COLORS.primary_background,
-                                    borderRadius: 2,
+                        <Tooltip
+                            slotProps={{
+                                tooltip: {
+                                    sx: {
+                                        color: COLORS.primary_background_text,
+                                        backgroundColor: COLORS.primary_background,
+                                        borderRadius: 2,
+                                    },
                                 },
+                            }}
+                            title={upperHeadgear !== null ? `${upperHeadgear.name} (ID: ${upperHeadgear.itemId})` : 'No Upper Headgear selected'}
+                        >
+                            <Box display="flex" flexDirection="column" alignItems="center" justifyContent="start">
+                                <Typography
+                                    variant="body2"
+                                    component="label"
+                                    fontWeight={700}
+                                >
+                                    UPPER
+                                </Typography>
+                                <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" width={24} height={24}>
+                                    <Image
+                                        src={upperHeadgear !== null ? `https://db.irowiki.org/image/item/${upperHeadgear.itemId}.png` : '/interface/forbidden_item.png'}
+                                        alt={"test"}
+                                        width={24}
+                                        height={24}
+                                        draggable={false}
+                                        loading="lazy"
+                                    />
+                                </Box>
+                            </Box>
+                        </Tooltip>
+                    </Button>
+                    <Button
+                        onClick={() => resetUpperHeadgear()}
+                        disabled={upperHeadgear === null}
+                        sx={{
+                            minWidth: 110,
+                            maxWidth: 200,
+                            backgroundColor: 'inherit',
+                            border: '1px solid #b8c4dc',
+                            borderRadius: 1,
+                            '&:hover': {
+                                border: '1px solid #FFF495',
+                            },
+                            '&:disabled': {
+                                backgroundColor: '#F2F2F2',
                             },
                         }}
-                        title={middleHeadgear !== null ? `${middleHeadgear.name} (ID: ${middleHeadgear.itemId})` : 'No Middle Headgear selected'}
                     >
-                        <Box display="flex" flexDirection="column" alignItems="center" justifyContent="start">
-                            <Typography
-                                variant="body2"
-                                component="label"
-                                sx={{ p: 0.5, borderRadius: 2, fontWeight: 700 }}
-                            >
-                                MIDDLE
-                            </Typography>
-                            <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" width={24} height={24}>
-                                <Image
-                                    src={middleHeadgear !== null ? `https://db.irowiki.org/image/item/${middleHeadgear.itemId}.png` : '/interface/forbidden_item.png'}
-                                    alt={"test"}
-                                    width={24}
-                                    height={24}
-                                    draggable={false}
-                                    loading="lazy"
-                                />
-                            </Box>
-                        </Box>
-                    </Tooltip>
-                </Button>
-                <Button
-                    onClick={() => setSelected("Lower")}
-                    sx={{
-                        minWidth: 110,
-                        maxWidth: 200,
-                        padding: 1,
-                        margin: 2,
-                        backgroundColor: selected === "Lower" ? '#fff495' : 'inherit',
-                        border: '1px solid #b8c4dc',
-                        borderRadius: 1,
-                        '&:hover': {
-                            border: '1px solid #fff495',
-                        },
-                    }}
+                        <Typography
+                            variant="body2"
+                            component="label"
+                            fontWeight={400}
+                            fontSize={10}
+                        >
+                            CLEAR
+                        </Typography>
+                    </Button>
+                </Box>
+                <Box
+                    display="flex"
+                    flexDirection="column"
+                    alignItems="center"
+                    flex={1}
+                    gap={1}
+                    padding={2}
                 >
-                    <Tooltip
-                        slotProps={{
-                            tooltip: {
-                                sx: {
-                                    color: COLORS.primary_background_text,
-                                    backgroundColor: COLORS.primary_background,
-                                    borderRadius: 2,
-                                },
+                    <Button
+                        onClick={() => setSelected("Middle")}
+                        sx={{
+                            minWidth: 110,
+                            maxWidth: 200,
+                            padding: 1,
+                            backgroundColor: selected === "Middle" ? '#fff495' : 'inherit',
+                            border: '1px solid #b8c4dc',
+                            borderRadius: 1,
+                            '&:hover': {
+                                border: '1px solid #fff495',
                             },
                         }}
-                        title={lowerHeadgear !== null ? `${lowerHeadgear.name} (ID: ${lowerHeadgear.itemId})` : 'No Lower Headgear selected'}
                     >
-                        <Box display="flex" flexDirection="column" alignItems="center" justifyContent="start">
-                            <Typography
-                                variant="body2"
-                                component="label"
-                                sx={{ p: 0.5, borderRadius: 2, fontWeight: 700 }}
-                            >
-                                LOWER
-                            </Typography>
-                            <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" width={24} height={24}>
-                                <Image
-                                    src={lowerHeadgear !== null ? `https://db.irowiki.org/image/item/${lowerHeadgear.itemId}.png` : '/interface/forbidden_item.png'}
-                                    alt={"test"}
-                                    width={24}
-                                    height={24}
-                                    draggable={false}
-                                    loading="lazy"
-                                />
-                            </Box>
-                        </Box>
-                    </Tooltip>
-                </Button>
-                <Button
-                    onClick={() => setSelected("Garment")}
-                    sx={{
-                        minWidth: 110,
-                        maxWidth: 200,
-                        padding: 1,
-                        margin: 2,
-                        backgroundColor: selected === "Garment" ? '#fff495' : 'inherit',
-                        border: '1px solid #b8c4dc',
-                        borderRadius: 1,
-                        '&:hover': {
-                            border: '1px solid #fff495',
-                        },
-                    }}
-                >
-                    <Tooltip
-                        slotProps={{
-                            tooltip: {
-                                sx: {
-                                    color: COLORS.primary_background_text,
-                                    backgroundColor: COLORS.primary_background,
-                                    borderRadius: 2,
+                        <Tooltip
+                            slotProps={{
+                                tooltip: {
+                                    sx: {
+                                        color: COLORS.primary_background_text,
+                                        backgroundColor: COLORS.primary_background,
+                                        borderRadius: 2,
+                                    },
                                 },
+                            }}
+                            title={middleHeadgear !== null ? `${middleHeadgear.name} (ID: ${middleHeadgear.itemId})` : 'No Middle Headgear selected'}
+                        >
+                            <Box display="flex" flexDirection="column" alignItems="center" justifyContent="start">
+                                <Typography
+                                    variant="body2"
+                                    component="label"
+                                    fontWeight={700}
+                                >
+                                    MIDDLE
+                                </Typography>
+                                <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" width={24} height={24}>
+                                    <Image
+                                        src={middleHeadgear !== null ? `https://db.irowiki.org/image/item/${middleHeadgear.itemId}.png` : '/interface/forbidden_item.png'}
+                                        alt={"test"}
+                                        width={24}
+                                        height={24}
+                                        draggable={false}
+                                        loading="lazy"
+                                    />
+                                </Box>
+                            </Box>
+                        </Tooltip>
+                    </Button>
+                    <Button
+                        onClick={() => resetMiddleHeadgear()}
+                        disabled={middleHeadgear === null}
+                        sx={{
+                            minWidth: 110,
+                            maxWidth: 200,
+                            backgroundColor: 'inherit',
+                            border: '1px solid #b8c4dc',
+                            borderRadius: 1,
+                            '&:hover': {
+                                border: '1px solid #FFF495',
+                            },
+                            '&:disabled': {
+                                backgroundColor: '#F2F2F2',
                             },
                         }}
-                        title={garment !== null ? `${garment.name} (ID: ${garment.itemId})` : 'No Garment selected'}
                     >
-                        <Box display="flex" flexDirection="column" alignItems="center" justifyContent="start">
-                            <Typography
-                                variant="body2"
-                                component="label"
-                                sx={{ p: 0.5, borderRadius: 2, fontWeight: 700 }}
-                            >
-                                GARMENT
-                            </Typography>
-                            <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" width={24} height={24}>
-                                <Image
-                                    src={garment !== null ? `https://db.irowiki.org/image/item/${garment.itemId}.png` : '/interface/forbidden_item.png'}
-                                    alt={"test"}
-                                    width={24}
-                                    height={24}
-                                    draggable={false}
-                                    loading="lazy"
-                                />
+                        <Typography
+                            variant="body2"
+                            component="label"
+                            fontWeight={400}
+                            fontSize={10}
+                        >
+                            CLEAR
+                        </Typography>
+                    </Button>
+                </Box>
+                <Box
+                    display="flex"
+                    flexDirection="column"
+                    alignItems="center"
+                    flex={1}
+                    gap={1}
+                    padding={2}
+                >
+                    <Button
+                        onClick={() => setSelected("Lower")}
+                        sx={{
+                            minWidth: 110,
+                            maxWidth: 200,
+                            padding: 1,
+                            backgroundColor: selected === "Lower" ? '#fff495' : 'inherit',
+                            border: '1px solid #b8c4dc',
+                            borderRadius: 1,
+                            '&:hover': {
+                                border: '1px solid #fff495',
+                            },
+                        }}
+                    >
+                        <Tooltip
+                            slotProps={{
+                                tooltip: {
+                                    sx: {
+                                        color: COLORS.primary_background_text,
+                                        backgroundColor: COLORS.primary_background,
+                                        borderRadius: 2,
+                                    },
+                                },
+                            }}
+                            title={lowerHeadgear !== null ? `${lowerHeadgear.name} (ID: ${lowerHeadgear.itemId})` : 'No Lower Headgear selected'}
+                        >
+                            <Box display="flex" flexDirection="column" alignItems="center" justifyContent="start">
+                                <Typography
+                                    variant="body2"
+                                    component="label"
+                                    fontWeight={700}
+                                >
+                                    LOWER
+                                </Typography>
+                                <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" width={24} height={24}>
+                                    <Image
+                                        src={lowerHeadgear !== null ? `https://db.irowiki.org/image/item/${lowerHeadgear.itemId}.png` : '/interface/forbidden_item.png'}
+                                        alt={"test"}
+                                        width={24}
+                                        height={24}
+                                        draggable={false}
+                                        loading="lazy"
+                                    />
+                                </Box>
                             </Box>
-                        </Box>
-                    </Tooltip>
-                </Button>
+                        </Tooltip>
+                    </Button>
+                    <Button
+                        onClick={() => resetLowerHeadgear()}
+                        disabled={lowerHeadgear === null}
+                        sx={{
+                            minWidth: 110,
+                            maxWidth: 200,
+                            backgroundColor: 'inherit',
+                            border: '1px solid #b8c4dc',
+                            borderRadius: 1,
+                            '&:hover': {
+                                border: '1px solid #FFF495',
+                            },
+                            '&:disabled': {
+                                backgroundColor: '#F2F2F2',
+                            },
+                        }}
+                    >
+                        <Typography
+                            variant="body2"
+                            component="label"
+                            fontWeight={400}
+                            fontSize={10}
+                        >
+                            CLEAR
+                        </Typography>
+                    </Button>
+                </Box>
+                <Box
+                    display="flex"
+                    flexDirection="column"
+                    alignItems="center"
+                    flex={1}
+                    gap={1}
+                    padding={2}
+                >
+                    <Button
+                        onClick={() => setSelected("Garment")}
+                        sx={{
+                            minWidth: 110,
+                            maxWidth: 200,
+                            padding: 1,
+                            backgroundColor: selected === "Garment" ? '#fff495' : 'inherit',
+                            border: '1px solid #b8c4dc',
+                            borderRadius: 1,
+                            '&:hover': {
+                                border: '1px solid #fff495',
+                            },
+                        }}
+                    >
+                        <Tooltip
+                            slotProps={{
+                                tooltip: {
+                                    sx: {
+                                        color: COLORS.primary_background_text,
+                                        backgroundColor: COLORS.primary_background,
+                                        borderRadius: 2,
+                                    },
+                                },
+                            }}
+                            title={garment !== null ? `${garment.name} (ID: ${garment.itemId})` : 'No Garment selected'}
+                        >
+                            <Box display="flex" flexDirection="column" alignItems="center" justifyContent="start">
+                                <Typography
+                                    variant="body2"
+                                    component="label"
+                                    fontWeight={700}
+                                >
+                                    GARMENT
+                                </Typography>
+                                <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" width={24} height={24}>
+                                    <Image
+                                        src={garment !== null ? `https://db.irowiki.org/image/item/${garment.itemId}.png` : '/interface/forbidden_item.png'}
+                                        alt={"test"}
+                                        width={24}
+                                        height={24}
+                                        draggable={false}
+                                        loading="lazy"
+                                    />
+                                </Box>
+                            </Box>
+                        </Tooltip>
+                    </Button>
+                    <Button
+                        onClick={() => resetGarment()}
+                        disabled={garment === null}
+                        sx={{
+                            minWidth: 110,
+                            maxWidth: 200,
+                            backgroundColor: 'inherit',
+                            border: '1px solid #b8c4dc',
+                            borderRadius: 1,
+                            '&:hover': {
+                                border: '1px solid #FFF495',
+                            },
+                            '&:disabled': {
+                                backgroundColor: '#F2F2F2',
+                            },
+                        }}
+                    >
+                        <Typography
+                            variant="body2"
+                            component="label"
+                            fontWeight={400}
+                            fontSize={10}
+                        >
+                            CLEAR
+                        </Typography>
+                    </Button>
+                </Box>
             </Box>
             {selected === "Upper" ? (
                 <HeadgearUpperTable headgearData={headgearData} queryFilter={debouncedSearch} />

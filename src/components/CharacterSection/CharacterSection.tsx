@@ -3,6 +3,7 @@ import Character from './Character';
 import HairStyleList from './HairStyleList';
 import HairColorList from './HairColorList';
 import OutfitMenuList from './OutfitMenu';
+import ActionMenuList from './ActionMenu';
 import ResetMenuList from './ResetMenu';
 import JobSelector from './JobSelector';
 
@@ -28,6 +29,7 @@ const CharacterSection = () => {
                 <Box display="flex" flexDirection="column" gap={2}>
                     <HairStyleList />
                     <HairColorList />
+                    <ActionMenuList />
                     <ResetMenuList />
                 </Box>
             </Box>
