@@ -51,7 +51,7 @@ const HeadgearUpperTable = ({
                             border: '1px solid #b8c4dc',
                             borderRadius: 1,
                             '&:hover': {
-                                border: '1px solid #fff495',
+                                border: '1px solid #515789',
                             },
                         }}
                     >
