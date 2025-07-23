@@ -19,6 +19,16 @@ const MainScreen = ({
     model: Partial<Model> | undefined;
     endpoints: Partial<Record<EndpointName, EndpointStatus>> | undefined;
 }) => {
+
+    const handleLoading = () => {
+        for (const key in endpoints) {
+            if (endpoints[key as EndpointName]?.loading) {
+                return true;
+            }
+        }
+        return false;
+    };
+
     return (
         <Box
             sx={{
@@ -64,7 +74,7 @@ const MainScreen = ({
                     maxWidth: 700
                 }}
             >
-                {endpoints === undefined || (endpoints?.getGarmentData?.loading || endpoints?.getHeadgearData?.loading) ? (
+                {handleLoading() ? (
                     <Loading />
                 ) : (
                     <ItemSection headgearData={model?.headgearData} garmentData={model?.garmentData} />

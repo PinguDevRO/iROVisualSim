@@ -323,10 +323,10 @@ const AppBarMenu = ({
               }}
             >
               <Image
-                src="/logo_loop.png"
+                src="/logo.png"
                 alt="iRO Market Logo"
-                width={100}
-                height={63}
+                width={200}
+                height={71}
                 draggable={false}
               />
             </Box>

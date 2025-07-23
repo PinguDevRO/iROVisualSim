@@ -47,10 +47,10 @@ const Loading = () => {
             <Spinner />
             <Image
                 className="dark"
-                src={"/logo_loop.png"}
+                src={"/loading_logo.png"}
                 alt=""
                 width={120}
-                height={76}
+                height={71}
                 draggable={false}
                 style={ImageProperties}
             />
