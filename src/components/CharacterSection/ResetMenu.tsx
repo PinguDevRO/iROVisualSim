@@ -12,22 +12,21 @@ const ResetMenuList = () => {
         <Box
             display="flex"
             flexDirection="column"
-            alignItems="start"
+            alignItems="center"
             justifyContent="center"
-            gap={1}
+            width="100%"
         >
-            <Typography variant="body2" fontWeight={700} component="span">
-                Reset
-            </Typography>
             <Button
                 variant="outlined"
                 onClick={() => resetCharacter()}
+                color="error"
                 sx={{
-                    width: "100%"
+                    width: "100%",
+
                 }}
             >
                 <Typography variant="body2" fontWeight={400} component="span">
-                    Character
+                    Reset Character
                 </Typography>
             </Button>
         </Box>

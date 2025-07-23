@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { HeadgearModel } from '@/models/get-headgear';
 import { GarmentModel } from '@/models/get-garment';
 import { persist } from 'zustand/middleware';
-import { regular_mount_list, cash_mount_list } from '@/constants/joblist';
+import { regular_mount_list, cash_mount_list, third_job } from '@/constants/joblist';
 import PostRender from '@/services/post-render';
 
 export type Direction = "Left" | "Right";
@@ -104,6 +104,10 @@ export const useStore = create<State>()(
                     set((state) => ({ character: { ...state.character, gender: 1 } }));
                 }
 
+                if(!third_job.some((x) => x.id === newJob)){
+                    set((state) => ({ character: { ...state.character, outfit: 0 } }));
+                }
+
                 if(cash_mount === 1){
                     let found = false;
                     for (const [strKey, val] of Object.entries(cash_mount_list)) {
@@ -116,6 +120,7 @@ export const useStore = create<State>()(
                     }
                     if(!found){
                         set((state) => ({ character: { ...state.character, job } }));
+                        set(() => ({ cash_mount_checked: 0 }));
                     }
                 }
 
@@ -131,6 +136,7 @@ export const useStore = create<State>()(
                     }
                     if(!found){
                         set((state) => ({ character: { ...state.character, job } }));
+                        set(() => ({ regular_mount_checked: 0 }));
                     }
                 }
                 else {

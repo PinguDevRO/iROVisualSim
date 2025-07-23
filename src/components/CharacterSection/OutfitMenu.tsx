@@ -1,14 +1,15 @@
 import { ChangeEvent } from 'react';
 import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
+import { third_job, is_3rdjob_using_jobmount, is_valid_job_with_mount } from '@/constants/joblist';
 import { useStore } from "@/store/useStore";
 
 
 const OutfitMenuList = () => {
 
+    const currentJob = parseInt(useStore((x) => x.character.job)[0]);
     const outfitState = useStore((x) => x.character.outfit);
     const jobMountState = useStore((x) => x.regular_mount_checked);
     const cashMountState = useStore((x) => x.cash_mount_checked);
@@ -23,33 +24,38 @@ const OutfitMenuList = () => {
         setJobMountState(state.target.checked ? 1 : 0);
     };
 
-    const handleOnCashMount = (state: ChangeEvent<HTMLInputElement>) => {
-        if (jobMountState === 1 && state.target.checked) {
-            setJobMountState(0);
-        }
-        setCashMountState(state.target.checked ? 1 : 0);
-    };
-
     return (
         <Box
             display="flex"
             flexDirection="row"
-            flex={1}
-            alignItems="start"
+            alignItems="center"
             justifyContent="center"
         >
             <FormGroup>
-                <Typography variant="body2" fontWeight={700} component="span" align="left">
-                    Costume
-                </Typography>
-                <FormControlLabel control={<Checkbox checked={outfitState === 1 ? true : false} onChange={(state) => setOutfitState(state.target.checked ? 1 : 0)} />} label="jRO Costume" />
+                <FormControlLabel
+                    control={
+                        <Checkbox
+                            size="small"
+                            disabled={!(third_job.some((x) => x.id === currentJob) || is_3rdjob_using_jobmount(currentJob))}
+                            checked={outfitState === 1 ? true : false}
+                            onChange={(state) => setOutfitState(state.target.checked ? 1 : 0)}
+                        />
+                    }
+                    label="jRO Costume"
+                />
             </FormGroup>
             <FormGroup>
-                <Typography variant="body2" fontWeight={700} component="span" align="left">
-                    Mount
-                </Typography>
-                <FormControlLabel control={<Checkbox checked={jobMountState === 1 ? true : false} onChange={handleOnJobMount} />} label="Job Mount" />
-                <FormControlLabel control={<Checkbox checked={cashMountState === 1 ? true : false} onChange={handleOnCashMount} />} label="Cash Mount" />
+                <FormControlLabel
+                    control={
+                        <Checkbox
+                            size="small"
+                            disabled={!is_valid_job_with_mount(currentJob)}
+                            checked={jobMountState === 1 ? true : false}
+                            onChange={handleOnJobMount}
+                        />
+                    }
+                    label="Job Mount"
+                />
             </FormGroup>
         </Box>
     );

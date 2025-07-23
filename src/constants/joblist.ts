@@ -418,18 +418,53 @@ export const cash_mount_list: { [key: number]: number } = {
     4258: 4281,
 };
 
+export const is_3rdjob_using_jobmount = (current_id: number): boolean => {
+    for (const [strKey, value] of Object.entries(regular_mount_list)) {
+        const key = Number(strKey);
+        if (current_id === value) {
+            return third_job.some((x) => x.id === key);
+        }
+    };
+    return false;
+};
+
+export const is_valid_job_with_mount = (current_id: number) => {
+    for (const [strKey, value] of Object.entries(regular_mount_list)) {
+        const key = Number(strKey);
+        if (current_id === key || current_id === value){
+            return true;
+        }
+    };
+    return false;
+};
+
+export const is_same_mount_class = (id: number, current_id: number): number => {
+    if (id === current_id) return current_id;
+
+    for (const [strKey, value] of Object.entries(regular_mount_list)) {
+        const key = Number(strKey);
+        if (id === key && current_id === value) {
+            return current_id;
+        }
+    };
+
+    return id;
+};
+
 export const is_same_class = (id: number, current_id: number): boolean => {
     if (id === current_id) return true;
 
     for (const [strKey, value] of Object.entries(regular_mount_list)) {
         const key = Number(strKey);
-        if (id === key && current_id === value) return true;
+        if (id === key && current_id === value) {
+            return true;
+        }
     };
 
-    for (const [strKey, value] of Object.entries(cash_mount_list)) {
-        const key = Number(strKey);
-        if (id === key && current_id === value) return true;
-    };
+    //for (const [strKey, value] of Object.entries(cash_mount_list)) {
+    //    const key = Number(strKey);
+    //    if (id === key && current_id === value) return true;
+    //};
 
     return false;
 };

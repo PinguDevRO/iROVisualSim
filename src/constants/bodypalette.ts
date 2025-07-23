@@ -116,18 +116,18 @@ export const third_fourth_job_palette_list = [
 export const first_job_body_palette_list = [
     {
         id: 0,
-        visual: "0",
-        name: "Palette 0"
-    },
-    {
-        id: 1,
         visual: "1",
         name: "Palette 1"
     },
     {
-        id: 2,
+        id: 1,
         visual: "2",
         name: "Palette 2"
+    },
+    {
+        id: 2,
+        visual: "3",
+        name: "Palette 3"
     },
     {
         id: 3,
@@ -139,65 +139,65 @@ export const first_job_body_palette_list = [
 export const regular_job_body_palette_list = [
     {
         id: 0,
-        visual: "0",
-        name: "Palette 0"
-    },
-    {
-        id: 1,
         visual: "1",
         name: "Palette 1"
     },
     {
-        id: 2,
+        id: 1,
         visual: "2",
         name: "Palette 2"
     },
     {
-        id: 3,
+        id: 2,
         visual: "3",
         name: "Palette 3"
+    },
+    {
+        id: 3,
+        visual: "4",
+        name: "Palette 4"
     },
 ];
 
 export const third_fourth_job_body_palette_list = [
     {
         id: 0,
-        visual: "0",
-        name: "Palette 0"
-    },
-    {
-        id: 1,
         visual: "1",
         name: "Palette 1"
     },
     {
-        id: 2,
+        id: 1,
         visual: "2",
         name: "Palette 2"
     },
     {
-        id: 3,
+        id: 2,
         visual: "3",
         name: "Palette 3"
     },
     {
-        id: 4,
+        id: 3,
         visual: "4",
         name: "Palette 4"
     },
     {
-        id: 5,
+        id: 4,
         visual: "5",
         name: "Palette 5"
     },
     {
-        id: 6,
+        id: 5,
         visual: "6",
         name: "Palette 6"
     },
     {
-        id: 7,
+        id: 6,
         visual: "7",
         name: "Palette 7"
+    },
+    {
+        id: 7,
+        visual: "8",
+        name: "Palette 8"
     }
 ];

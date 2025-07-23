@@ -4,7 +4,6 @@ import Box from '@mui/material/Box';
 import CharacterZoomLens from './CharacterZoomLens';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
-import BodyColorList from './BodyColorList';
 import { useStore, Direction } from "@/store/useStore";
 
 type ButtonDirection = "Left" | "Right";
@@ -256,7 +255,6 @@ const Character = () => {
                     </Box>
                 </Box>
             </Box>
-            <BodyColorList />
         </Box>
     );
 };

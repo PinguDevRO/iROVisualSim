@@ -17,6 +17,7 @@ import {
     expanded_fourth_job,
     special_job,
     is_same_class,
+    is_same_mount_class,
 } from '@/constants/joblist';
 import { useStore } from '@/store/useStore';
 
@@ -51,7 +52,7 @@ const JobSelector = () => {
                     {novice_job.map((x) => (
                         <MenuItem
                             key={x.id}
-                            value={x.id.toString()}
+                            value={is_same_mount_class(x.id, parseInt(selectedJob)).toString()}
                         >
                             <Box display="flex" flexDirection="row" gap={2} alignItems="center">
                                 <JobTooltip jobId={x.id} jobName={x.name} isSelected={is_same_class(x.id, parseInt(selectedJob))} />
@@ -65,7 +66,7 @@ const JobSelector = () => {
                     {first_job.map((x) => (
                         <MenuItem
                             key={x.id}
-                            value={x.id.toString()}
+                            value={is_same_mount_class(x.id, parseInt(selectedJob)).toString()}
                         >
                             <Box display="flex" flexDirection="row" gap={2} alignItems="center">
                                 <JobTooltip jobId={x.id} jobName={x.name} isSelected={is_same_class(x.id, parseInt(selectedJob))} />
@@ -79,7 +80,7 @@ const JobSelector = () => {
                     {second_job.map((x) => (
                         <MenuItem
                             key={x.id}
-                            value={x.id.toString()}
+                            value={is_same_mount_class(x.id, parseInt(selectedJob)).toString()}
                         >
                             <Box display="flex" flexDirection="row" gap={2} alignItems="center">
                                 <JobTooltip jobId={x.id} jobName={x.name} isSelected={is_same_class(x.id, parseInt(selectedJob))} />
@@ -93,7 +94,7 @@ const JobSelector = () => {
                     {transcendence_job.map((x) => (
                         <MenuItem
                             key={x.id}
-                            value={x.id.toString()}
+                            value={is_same_mount_class(x.id, parseInt(selectedJob)).toString()}
                         >
                             <Box display="flex" flexDirection="row" gap={2} alignItems="center">
                                 <JobTooltip jobId={x.id} jobName={x.name} isSelected={is_same_class(x.id, parseInt(selectedJob))} />
@@ -107,7 +108,7 @@ const JobSelector = () => {
                     {third_job.map((x) => (
                         <MenuItem
                             key={x.id}
-                            value={x.id.toString()}
+                            value={is_same_mount_class(x.id, parseInt(selectedJob)).toString()}
                         >
                             <Box display="flex" flexDirection="row" gap={2} alignItems="center">
                                 <JobTooltip jobId={x.id} jobName={x.name} isSelected={is_same_class(x.id, parseInt(selectedJob))} />
@@ -121,7 +122,7 @@ const JobSelector = () => {
                     {fourth_job.map((x) => (
                         <MenuItem
                             key={x.id}
-                            value={x.id.toString()}
+                            value={is_same_mount_class(x.id, parseInt(selectedJob)).toString()}
                         >
                             <Box display="flex" flexDirection="row" gap={2} alignItems="center">
                                 <JobTooltip jobId={x.id} jobName={x.name} isSelected={is_same_class(x.id, parseInt(selectedJob))} />
@@ -135,7 +136,7 @@ const JobSelector = () => {
                     {expanded_first_job.map((x) => (
                         <MenuItem
                             key={x.id}
-                            value={x.id.toString()}
+                            value={is_same_mount_class(x.id, parseInt(selectedJob)).toString()}
                         >
                             <Box display="flex" flexDirection="row" gap={2} alignItems="center">
                                 <JobTooltip jobId={x.id} jobName={x.name} isSelected={is_same_class(x.id, parseInt(selectedJob))} />
@@ -149,7 +150,7 @@ const JobSelector = () => {
                     {expanded_second_job.map((x) => (
                         <MenuItem
                             key={x.id}
-                            value={x.id.toString()}
+                            value={is_same_mount_class(x.id, parseInt(selectedJob)).toString()}
                         >
                             <Box display="flex" flexDirection="row" gap={2} alignItems="center">
                                 <JobTooltip jobId={x.id} jobName={x.name} isSelected={is_same_class(x.id, parseInt(selectedJob))} />
@@ -163,7 +164,7 @@ const JobSelector = () => {
                     {expanded_third_job.map((x) => (
                         <MenuItem
                             key={x.id}
-                            value={x.id.toString()}
+                            value={is_same_mount_class(x.id, parseInt(selectedJob)).toString()}
                         >
                             <Box display="flex" flexDirection="row" gap={2} alignItems="center">
                                 <JobTooltip jobId={x.id} jobName={x.name} isSelected={is_same_class(x.id, parseInt(selectedJob))} />
@@ -177,7 +178,7 @@ const JobSelector = () => {
                     {expanded_fourth_job.map((x) => (
                         <MenuItem
                             key={x.id}
-                            value={x.id.toString()}
+                            value={is_same_mount_class(x.id, parseInt(selectedJob)).toString()}
                         >
                             <Box display="flex" flexDirection="row" gap={2} alignItems="center">
                                 <JobTooltip jobId={x.id} jobName={x.name} isSelected={is_same_class(x.id, parseInt(selectedJob))} />
@@ -191,7 +192,7 @@ const JobSelector = () => {
                     {special_job.map((x) => (
                         <MenuItem
                             key={x.id}
-                            value={x.id.toString()}
+                            value={is_same_mount_class(x.id, parseInt(selectedJob)).toString()}
                         >
                             <Box display="flex" flexDirection="row" gap={2} alignItems="center">
                                 <JobTooltip jobId={x.id} jobName={x.name} isSelected={is_same_class(x.id, parseInt(selectedJob))} />

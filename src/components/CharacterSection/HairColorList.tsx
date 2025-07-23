@@ -20,7 +20,7 @@ const HairColorList = () => {
     }
 
     return (
-        <Box display="flex" flexDirection="column" gap={1}>
+        <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" gap={1}>
             <Typography variant="body2" fontWeight={700} component="span">
                 Hair Color
             </Typography>
@@ -30,8 +30,6 @@ const HairColorList = () => {
                 flexWrap="wrap"
                 alignItems="center"
                 justifyContent="center"
-                border="1px solid #d8d8d8 !important"
-                borderRadius={1}
             >
                 {haircolors.map((x, idx) => (
                     <IconButton

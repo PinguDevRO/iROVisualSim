@@ -21,7 +21,7 @@ const BodyColorList = () => {
     const setSelectedBodyColor = useStore((x) => x.update_char_bodyPalette);
 
     return (
-        <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
+        <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" gap={1}>
             <Typography variant="body2" fontWeight={700} component="span">
                 Body Clothes Color
             </Typography>
@@ -59,8 +59,8 @@ const BodyColorList = () => {
                                 flexDirection="column"
                                 alignItems="center"
                                 justifyContent="center"
-                                width={30}
-                                height={30}
+                                width={22}
+                                height={22}
                                 sx={{
                                     backgroundColor: x.id === selectedBodyColor ? '#fff495' : 'inherit',
                                     border: "1px solid #b8c4dc !important",
@@ -70,7 +70,7 @@ const BodyColorList = () => {
                                     },
                                 }}
                             >
-                                {x.visual}
+                                <Typography variant="body2" fontWeight={700} component="span">{x.visual}</Typography>
                             </Box>
                         </Tooltip>
                     </IconButton>
@@ -102,8 +102,8 @@ const BodyColorList = () => {
                                 flexDirection="column"
                                 alignItems="center"
                                 justifyContent="center"
-                                width={30}
-                                height={30}
+                                width={22}
+                                height={22}
                                 sx={{
                                     backgroundColor: x.id === selectedBodyColor ? '#fff495' : 'inherit',
                                     border: "1px solid #b8c4dc !important",
@@ -113,7 +113,7 @@ const BodyColorList = () => {
                                     },
                                 }}
                             >
-                                {x.visual}
+                                <Typography variant="body2" fontWeight={700} component="span">{x.visual}</Typography>
                             </Box>
                         </Tooltip>
                     </IconButton>
@@ -145,8 +145,8 @@ const BodyColorList = () => {
                                 flexDirection="column"
                                 alignItems="center"
                                 justifyContent="center"
-                                width={30}
-                                height={30}
+                                width={22}
+                                height={22}
                                 sx={{
                                     backgroundColor: x.id === selectedBodyColor ? '#fff495' : 'inherit',
                                     border: "1px solid #b8c4dc !important",
@@ -156,7 +156,7 @@ const BodyColorList = () => {
                                     },
                                 }}
                             >
-                                {x.visual}
+                                <Typography variant="body2" fontWeight={700} component="span">{x.visual}</Typography>
                             </Box>
                         </Tooltip>
                     </IconButton>

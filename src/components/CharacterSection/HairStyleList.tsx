@@ -14,7 +14,7 @@ const HairStyleList = () => {
     const setSelectedHead = useStore((x) => x.update_char_head);
 
     return (
-        <Box display="flex" flexDirection="column" gap={1}>
+        <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" gap={1}>
             <Typography variant="body2" fontWeight={700} component="span">
                 Hair Style
             </Typography>
@@ -24,8 +24,6 @@ const HairStyleList = () => {
                 alignItems="center"
                 justifyContent="center"
                 flexWrap="wrap"
-                border="1px solid #d8d8d8 !important"
-                borderRadius={1}
             >
                 {selectedGender === 1 && (selectedJob !== '4218' && selectedJob !== '4308') ?
                     headlist.human_male.map((x) => (

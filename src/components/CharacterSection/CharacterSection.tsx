@@ -2,6 +2,7 @@ import Box from '@mui/material/Box';
 import Character from './Character';
 import HairStyleList from './HairStyleList';
 import HairColorList from './HairColorList';
+import BodyColorList from './BodyColorList';
 import OutfitMenuList from './OutfitMenu';
 import ActionMenuList from './ActionMenu';
 import ResetMenuList from './ResetMenu';
@@ -21,15 +22,16 @@ const CharacterSection = () => {
                     padding: 2
                 }}
             >
-                <Box display="flex" flexDirection="column" gap={2}>
+                <Box display="flex" flexDirection="column" gap={1}>
                     <JobSelector />
-                    <Character />
                     <OutfitMenuList />
+                    <Character />
+                    <ActionMenuList />
                 </Box>
                 <Box display="flex" flexDirection="column" gap={2}>
                     <HairStyleList />
                     <HairColorList />
-                    <ActionMenuList />
+                    <BodyColorList />
                     <ResetMenuList />
                 </Box>
             </Box>
