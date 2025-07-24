@@ -6,6 +6,7 @@ import BodyColorList from './BodyColorList';
 import OutfitMenuList from './OutfitMenu';
 import ActionMenuList from './ActionMenu';
 import ResetMenuList from './ResetMenu';
+import ActionButton from './ActionButton';
 import JobSelector from './JobSelector';
 
 const CharacterSection = () => {
@@ -22,11 +23,12 @@ const CharacterSection = () => {
                     padding: 2
                 }}
             >
-                <Box display="flex" flexDirection="column" gap={1}>
+                <Box display="flex" flexDirection="column" gap={2}>
                     <JobSelector />
                     <OutfitMenuList />
                     <Character />
                     <ActionMenuList />
+                    <ActionButton />
                 </Box>
                 <Box display="flex" flexDirection="column" gap={2}>
                     <HairStyleList />

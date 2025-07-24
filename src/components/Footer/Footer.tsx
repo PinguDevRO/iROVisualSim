@@ -8,7 +8,7 @@ import { COLORS } from '@/theme/colors';
 
 const Footer = () => {
     return (
-        <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" px={4} py={1} gap={{ xs: 2, md: 0 }}>
+        <Box width={{ xs: "auto", md: "70%" }} display="flex" flexDirection="column" alignItems="center" justifyContent="center" px={4} py={1} gap={{ xs: 2, md: 0 }}>
             <CustomTypography
                 color={COLORS.primary_background_text}
                 variant="subtitle1"

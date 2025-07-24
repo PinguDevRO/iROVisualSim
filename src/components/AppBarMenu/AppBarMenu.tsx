@@ -321,14 +321,30 @@ const AppBarMenu = ({
                 xs: 'center',
                 md: 'flex-start',
               }}
+              gap={2}
             >
               <Image
                 src="/logo.png"
                 alt="iRO Market Logo"
-                width={200}
-                height={71}
+                width={68}
+                height={50}
                 draggable={false}
               />
+              <CustomTypography
+                color="#F2F2F2"
+                variant="body2"
+                component="span"
+                fontWeight={700}
+                letterSpacing="0.05em"
+                sx={{
+                  fontSize: {
+                    'xs': 24,
+                    'md': 20,
+                  }
+                }}
+              >
+                Character Sprite Simulator
+              </CustomTypography>
             </Box>
             <ServerStatus model={model} endpoints={endpoints} />
           </Box>

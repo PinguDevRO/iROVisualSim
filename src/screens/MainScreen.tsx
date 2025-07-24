@@ -5,6 +5,7 @@ import {
     EndpointStatus,
     Model
 } from '@/controllers/main';
+import { SnackbarProvider } from 'notistack'
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Loading from '@/components/Loading/Loading';
@@ -30,57 +31,67 @@ const MainScreen = ({
     };
 
     return (
-        <Box
-            sx={{
-                display: 'grid',
-                gridTemplateColumns: {
-                    'xs': "1fr",
-                    'md': "1fr 1fr"
-                },
-                gap: 2,
-                padding: 2,
-                boxSizing: 'border-box',
-                minWidth: 0,
-                borderRadius: {
-                    'xs': 0,
-                    'md': 2,
-                },
-                background: COLORS.third_background,
+        <SnackbarProvider
+            autoHideDuration={5000}
+            maxSnack={3}
+            dense
+            anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
             }}
         >
-            <Paper
-                elevation={3}
+            <Box
                 sx={{
-                    display: 'flex',
+                    display: 'grid',
+                    gridTemplateColumns: {
+                        'xs': "1fr",
+                        'md': "1fr 1fr"
+                    },
+                    gap: 2,
                     padding: 2,
-                    borderRadius: 2,
-                    alignItems: 'center',
-                    justifyContent: 'center',
+                    boxSizing: 'border-box',
                     minWidth: 0,
-                    maxWidth: 700
+                    borderRadius: {
+                        'xs': 0,
+                        'md': 2,
+                    },
+                    background: COLORS.third_background,
                 }}
             >
-                <CharacterSection />
-            </Paper>
-            <Paper
-                elevation={3}
-                sx={{
-                    display: 'flex',
-                    padding: 2,
-                    borderRadius: 2,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    minWidth: 0,
-                    maxWidth: 700
-                }}
-            >
-                {handleLoading() ? (
-                    <Loading />
-                ) : (
-                    <ItemSection headgearData={model?.headgearData} garmentData={model?.garmentData} />
-                )}
-            </Paper>
-        </Box>
+                <Paper
+                    elevation={3}
+                    sx={{
+                        display: 'flex',
+                        padding: 2,
+                        borderRadius: 2,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        minWidth: 0,
+                        maxWidth: 700
+                    }}
+                >
+                    <CharacterSection />
+                </Paper>
+                <Paper
+                    elevation={3}
+                    sx={{
+                        display: 'flex',
+                        padding: 2,
+                        borderRadius: 2,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        minWidth: 0,
+                        maxWidth: 700
+                    }}
+                >
+                    {handleLoading() ? (
+                        <Loading />
+                    ) : (
+                        <ItemSection headgearData={model?.headgearData} garmentData={model?.garmentData} />
+                    )}
+                </Paper>
+            </Box>
+        </SnackbarProvider>
     )
 };
 

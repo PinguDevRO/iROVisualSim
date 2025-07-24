@@ -35,7 +35,7 @@ const HeadgearUpperTable = ({
 
     return (
         <VirtuosoGrid
-            style={{ height: 500, width: '100%' }}
+            style={{ height: 550, width: '100%' }}
             totalCount={filteredData.length}
             listClassName="virtuoso-grid-list"
             itemContent={(index) => {

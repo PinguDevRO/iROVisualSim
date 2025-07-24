@@ -53,6 +53,8 @@ export type State = {
     reset_middle_headgear: () => void;
     reset_lower_headgear: () => void;
     reset_garment: () => void;
+
+    load_character: () => void;
 };
 
 export const initialState = {
@@ -106,6 +108,13 @@ export const useStore = create<State>()(
 
                 if(!third_job.some((x) => x.id === newJob)){
                     set((state) => ({ character: { ...state.character, outfit: 0 } }));
+                }
+
+                if([4218, 4308].indexOf(newJob) >= 0){ // Checking Doram
+                    const head = get().character.head;
+                    if(head > 10){
+                        set((state) => ({ character: { ...state.character, head: 1 } }));
+                    }
                 }
 
                 if(cash_mount === 1){
@@ -714,6 +723,11 @@ export const useStore = create<State>()(
                 set((state) => ({ character: { ...state.character, garment: initialState.character.garment } }));
                 set(() => ({ garment: initialState.garment }));
 
+                const currentChar = get().character;
+                const response = await PostRender(currentChar);
+                set({ character_url: response });
+            },
+            load_character: async () => {
                 const currentChar = get().character;
                 const response = await PostRender(currentChar);
                 set({ character_url: response });

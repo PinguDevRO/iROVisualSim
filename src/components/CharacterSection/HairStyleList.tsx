@@ -42,7 +42,7 @@ const HairStyleList = () => {
                                 alignItems="center"
                                 justifyContent="center"
                                 width={36}
-                                height={37}
+                                height={36}
                                 sx={{
                                     backgroundColor: parseInt(x) === selectedHead ? '#fff495' : 'inherit',
                                     border: "1px solid #b8c4dc !important",
@@ -53,10 +53,10 @@ const HairStyleList = () => {
                                 }}
                             >
                                 <Image
-                                    src={`/head/img_hairstyle${x}.png`}
+                                    src={`/head/img_hairstyle${x}.gif`}
                                     alt={x}
-                                    width={36}
-                                    height={37}
+                                    width={30}
+                                    height={28}
                                     draggable={false}
                                     loading="lazy"
                                 />
@@ -79,7 +79,7 @@ const HairStyleList = () => {
                                     alignItems="center"
                                     justifyContent="center"
                                     width={36}
-                                    height={37}
+                                    height={36}
                                     sx={{
                                         backgroundColor: parseInt(x) === selectedHead ? '#fff495' : 'inherit',
                                         border: "1px solid #b8c4dc !important",
@@ -90,10 +90,10 @@ const HairStyleList = () => {
                                     }}
                                 >
                                     <Image
-                                        src={`/head/img_hairstyle_doramboy${x}.png`}
+                                        src={`/head/img_hairstyle_doramboy${x}.gif`}
                                         alt={x}
-                                        width={36}
-                                        height={37}
+                                        width={30}
+                                        height={28}
                                         draggable={false}
                                         loading="lazy"
                                     />
@@ -116,7 +116,7 @@ const HairStyleList = () => {
                                         alignItems="center"
                                         justifyContent="center"
                                         width={36}
-                                        height={37}
+                                        height={36}
                                         sx={{
                                             backgroundColor: parseInt(x) === selectedHead ? '#fff495' : 'inherit',
                                             border: "1px solid #b8c4dc !important",
@@ -127,10 +127,10 @@ const HairStyleList = () => {
                                         }}
                                     >
                                         <Image
-                                            src={`/head/img_hairstyle_girl${x}.png`}
+                                            src={`/head/img_hairstyle_girl${x}.gif`}
                                             alt={x}
-                                            width={36}
-                                            height={37}
+                                            width={30}
+                                            height={28}
                                             draggable={false}
                                             loading="lazy"
                                         />
@@ -153,7 +153,7 @@ const HairStyleList = () => {
                                             alignItems="center"
                                             justifyContent="center"
                                             width={36}
-                                            height={37}
+                                            height={36}
                                             sx={{
                                                 backgroundColor: parseInt(x) === selectedHead ? '#fff495' : 'inherit',
                                                 border: "1px solid #b8c4dc !important",
@@ -164,10 +164,10 @@ const HairStyleList = () => {
                                             }}
                                         >
                                             <Image
-                                                src={`/head/img_hairstyle_doramgirl${x}.png`}
+                                                src={`/head/img_hairstyle_doramgirl${x}.gif`}
                                                 alt={x}
-                                                width={36}
-                                                height={37}
+                                                width={30}
+                                                height={28}
                                                 draggable={false}
                                                 loading="lazy"
                                             />
