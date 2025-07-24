@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "iRO Wiki - Character Simulator",
+  title: "iRO Wiki - Character Sprite Simulator",
   description: "Try out different headgears and costumes to see how your character would look in Ragnarok Online! This web app lets you mix and match visual equipment in real time, helping you plan the perfect style. Powered by iRO Wiki.",
 };
 
