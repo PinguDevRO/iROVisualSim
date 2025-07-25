@@ -418,20 +418,44 @@ export const cash_mount_list: { [key: number]: number } = {
     4258: 4281,
 };
 
-export const is_3rdjob_using_jobmount = (current_id: number): boolean => {
+export const get_key_from_mount = (val: number): number => {
     for (const [strKey, value] of Object.entries(regular_mount_list)) {
         const key = Number(strKey);
-        if (current_id === value) {
-            return third_job.some((x) => x.id === key);
+        if (val === value) {
+            return key;
         }
     };
-    return false;
+    return -1;
+}
+
+export const get_jobname_by_id = (id: number): string => {
+    const merged = [...novice_job, ...first_job, ...second_job, ...transcendence_job, ...third_job, ...fourth_job, ...expanded_first_job, ...expanded_second_job, ...expanded_third_job, ...expanded_fourth_job];
+    const idx = merged.findIndex((x) => x.id === id);
+
+    if (idx >= 0) {
+        return merged[idx].name;
+    }
+    else {
+        const key = get_key_from_mount(id);
+        const idx2 = merged.findIndex((x) => x.id === key);
+        if(idx2 >= 0){
+            return merged[idx2].name;
+        }
+        else {
+            return 'Unknown';
+        }
+    }
+};
+
+export const is_3rdjob_using_jobmount = (current_id: number): boolean => {
+    const key = get_key_from_mount(current_id);
+    return third_job.some((x) => x.id === key);
 };
 
 export const is_valid_job_with_mount = (current_id: number) => {
     for (const [strKey, value] of Object.entries(regular_mount_list)) {
         const key = Number(strKey);
-        if (current_id === key || current_id === value){
+        if (current_id === key || current_id === value) {
             return true;
         }
     };

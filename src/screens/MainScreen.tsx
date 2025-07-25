@@ -11,6 +11,7 @@ import Paper from "@mui/material/Paper";
 import Loading from '@/components/Loading/Loading';
 import ItemSection from '@/components/ItemSection/ItemSection';
 import CharacterSection from '@/components/CharacterSection/CharacterSection';
+import CharacterSelect from '@/components/CharacterSelect/CharacterSelect';
 import { COLORS } from "@/theme/colors";
 
 const MainScreen = ({
@@ -40,6 +41,7 @@ const MainScreen = ({
                 horizontal: 'right',
             }}
         >
+            <CharacterSelect />
             <Box
                 sx={{
                     display: 'grid',

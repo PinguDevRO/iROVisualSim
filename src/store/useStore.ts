@@ -7,7 +7,7 @@ import PostRender from '@/services/post-render';
 
 export type Direction = "Left" | "Right";
 
-export type Character = {
+export type CharacterData = {
     gender: number;
     job: string[];
     head: number;
@@ -21,17 +21,37 @@ export type Character = {
     outfit: number;
 };
 
-export type State = {
-    _hasHydrated: boolean;
+export type Character = {
+    exist: boolean;
+    name: string | null;
     character_url: string | null;
-    character: Character;
+    character: CharacterData;
     headgear_upper: HeadgearModel | null;
     headgear_middle: HeadgearModel | null;
     headgear_lower: HeadgearModel | null;
     garment: GarmentModel | null;
     cash_mount_checked: number;
     regular_mount_checked: number;
+    position: number;
+};
 
+export type State = {
+    _hasHydrated: boolean;
+    _characterModal: boolean;
+    characterList: Character[];
+
+    name: string | null;
+    character_url: string | null;
+    character: CharacterData;
+    headgear_upper: HeadgearModel | null;
+    headgear_middle: HeadgearModel | null;
+    headgear_lower: HeadgearModel | null;
+    garment: GarmentModel | null;
+    cash_mount_checked: number;
+    regular_mount_checked: number;
+    position: number;
+
+    update_object_in_array: () => void;
     update_char_url: (character_url: string | null) => void;
     update_char_gender: (gender: number) => void;
     update_char_job: (job: string[]) => void;
@@ -54,11 +74,18 @@ export type State = {
     reset_lower_headgear: () => void;
     reset_garment: () => void;
 
-    load_character: () => void;
+    load_file_character: (character: CharacterData, headgear_upper: HeadgearModel | null, headgear_middle: HeadgearModel | null, headgear_lower: HeadgearModel | null, garment: GarmentModel | null, cash_mount_checked: number, regular_mount_checked: number) => void;
+    load_character_modal: () => void;
+    open_character_modal: () => void;
+    close_character_modal: () => void;
+    load_character: (position: number) => void;
+    create_character: (position: number, name: string) => void;
+    delete_character: (pos: number) => void;
 };
 
-export const initialState = {
-    _hasHydrated: false,
+export const initialCharacter: Character = {
+    exist: false,
+    name: null,
     character_url: null,
     character: {
         gender: 1,
@@ -79,6 +106,39 @@ export const initialState = {
     garment: null,
     cash_mount_checked: 0,
     regular_mount_checked: 0,
+    position: 0,
+};
+
+export const initialState = {
+    _hasHydrated: false,
+    _characterModal: false,
+    characterList: Array.from({ length: 30 }, (_, i) => ({
+        ...initialCharacter,
+        position: i,
+    })),
+
+    name: 'iRO Wiki Guard',
+    character_url: null,
+    character: {
+        gender: 1,
+        job: ["0"],
+        head: 1,
+        headPalette: 1,
+        headdir: 0,
+        headgear: [0, 0, 0],
+        garment: 0,
+        bodyPalette: 0,
+        action: 0,
+        canvas: "200x200+100+150",
+        outfit: 0,
+    },
+    headgear_upper: null,
+    headgear_middle: null,
+    headgear_lower: null,
+    garment: null,
+    cash_mount_checked: 0,
+    regular_mount_checked: 0,
+    position: 0,
 };
 
 export const useStore = create<State>()(
@@ -86,12 +146,50 @@ export const useStore = create<State>()(
         (set, get) => ({
             ...initialState,
 
-            update_char_url: (character_url: string | null) => set(() => ({ character_url })),
+            update_object_in_array: () => {
+                const {
+                    characterList,
+                    position,
+                    name,
+                    character_url,
+                    character,
+                    headgear_lower,
+                    headgear_middle,
+                    headgear_upper,
+                    garment,
+                    cash_mount_checked,
+                    regular_mount_checked,
+                } = get();
+                const updated = [...characterList];
+                const idx = updated.findIndex((x) => x.position === position);
+
+                if(idx >= 0){
+                    updated[idx] = {
+                        exist: true,
+                        name: name,
+                        character_url: character_url,
+                        character: character,
+                        headgear_lower: headgear_lower,
+                        headgear_middle: headgear_middle,
+                        headgear_upper: headgear_upper,
+                        garment: garment,
+                        cash_mount_checked: cash_mount_checked,
+                        regular_mount_checked: regular_mount_checked,
+                        position: position,
+                    };
+                    set({ characterList: updated });
+                }
+            },
+            update_char_url: (character_url: string | null) => {
+                set(() => ({ character_url }));
+                get().update_object_in_array();
+            },
             update_char_gender: async (gender: number) => {
                 set((state) => ({ character: { ...state.character, gender } }));
                 const currentChar = get().character;
                 const response = await PostRender(currentChar);
                 set({ character_url: response });
+                get().update_object_in_array();
             },
             update_char_job: async (job: string[]) => {
                 const cash_mount = get().cash_mount_checked;
@@ -155,18 +253,21 @@ export const useStore = create<State>()(
                 const currentChar = get().character;
                 const response = await PostRender(currentChar);
                 set({ character_url: response });
+                get().update_object_in_array();
             },
             update_char_head: async (head: number) => {
                 set((state) => ({ character: { ...state.character, head } }));
                 const currentChar = get().character;
                 const response = await PostRender(currentChar);
                 set({ character_url: response });
+                get().update_object_in_array();
             },
             update_char_headPalette: async (headPalette: number) => {
                 set((state) => ({ character: { ...state.character, headPalette } }));
                 const currentChar = get().character;
                 const response = await PostRender(currentChar);
                 set({ character_url: response });
+                get().update_object_in_array();
             },
             update_char_headdir: async (headdir: Direction) => {
                 const directions = [1, 0, 2];
@@ -189,6 +290,7 @@ export const useStore = create<State>()(
                 const currentChar = get().character;
                 const response = await PostRender(currentChar);
                 set({ character_url: response });
+                get().update_object_in_array();
             },
             update_char_headgear: async (headgear: HeadgearModel | null) => {
                 if(headgear === null) return;
@@ -231,6 +333,7 @@ export const useStore = create<State>()(
                     const currentChar = get().character;
                     const response = await PostRender(currentChar);
                     set({ character_url: response });
+                    get().update_object_in_array();
                     return;
                 }
                 else if(headgear.location === 1){ //Middle
@@ -271,6 +374,7 @@ export const useStore = create<State>()(
                     const currentChar = get().character;
                     const response = await PostRender(currentChar);
                     set({ character_url: response });
+                    get().update_object_in_array();
                     return;
                 }
                 else if(headgear.location === 2){ //Lower
@@ -311,6 +415,7 @@ export const useStore = create<State>()(
                     const currentChar = get().character;
                     const response = await PostRender(currentChar);
                     set({ character_url: response });
+                    get().update_object_in_array();
                     return;
                 }
                 else if(headgear.location === 3){ //Upper & Middle
@@ -337,6 +442,7 @@ export const useStore = create<State>()(
                     const currentChar = get().character;
                     const response = await PostRender(currentChar);
                     set({ character_url: response });
+                    get().update_object_in_array();
                     return;
                 }
                 else if(headgear.location === 4){ //Upper & Lower
@@ -363,6 +469,7 @@ export const useStore = create<State>()(
                     const currentChar = get().character;
                     const response = await PostRender(currentChar);
                     set({ character_url: response });
+                    get().update_object_in_array();
                     return;
                 }
                 else if(headgear.location === 5){ //Middle & Lower
@@ -389,6 +496,7 @@ export const useStore = create<State>()(
                     const currentChar = get().character;
                     const response = await PostRender(currentChar);
                     set({ character_url: response });
+                    get().update_object_in_array();
                     return;
                 }
                 else if(headgear.location === 6){ //Upper & Middle & Lower
@@ -404,6 +512,7 @@ export const useStore = create<State>()(
                     const currentChar = get().character;
                     const response = await PostRender(currentChar);
                     set({ character_url: response });
+                    get().update_object_in_array();
                     return;
                 }
                 else {
@@ -419,12 +528,14 @@ export const useStore = create<State>()(
                 const currentChar = get().character;
                 const response = await PostRender(currentChar);
                 set({ character_url: response });
+                get().update_object_in_array();
             },
             update_char_bodyPalette: async (bodyPalette: number) => {
                 set((state) => ({ character: { ...state.character, bodyPalette } }));
                 const currentChar = get().character;
                 const response = await PostRender(currentChar);
                 set({ character_url: response });
+                get().update_object_in_array();
             },
             update_char_action: async (action: Direction) => {
                 if (action == "Left") {
@@ -452,6 +563,7 @@ export const useStore = create<State>()(
                 const currentChar = get().character;
                 const response = await PostRender(currentChar);
                 set({ character_url: response });
+                get().update_object_in_array();
             },
             update_char_movement_action: async (action: number) => {
                 let act = get().character.action;
@@ -466,12 +578,14 @@ export const useStore = create<State>()(
                 const currentChar = get().character;
                 const response = await PostRender(currentChar);
                 set({ character_url: response });
+                get().update_object_in_array();
             },
             update_char_outfit: async (outfit: number) => {
                 set((state) => ({ character: { ...state.character, outfit } }));
                 const currentChar = get().character;
                 const response = await PostRender(currentChar);
                 set({ character_url: response });
+                get().update_object_in_array();
             },
 
             update_cash_mount: async (cash_mount_checked: number) => {
@@ -499,6 +613,7 @@ export const useStore = create<State>()(
                 const currentChar = get().character;
                 const response = await PostRender(currentChar);
                 set({ character_url: response });
+                get().update_object_in_array();
             },
             update_regular_mount: async (regular_mount_checked: number) => {
                 set(() => ({ regular_mount_checked }));
@@ -525,6 +640,7 @@ export const useStore = create<State>()(
                 const currentChar = get().character;
                 const response = await PostRender(currentChar);
                 set({ character_url: response });
+                get().update_object_in_array();
             },
 
             reset_character: async () => {
@@ -537,7 +653,7 @@ export const useStore = create<State>()(
                 const currentChar = get().character;
                 const response = await PostRender(currentChar);
                 set({ character_url: response });
-
+                get().update_object_in_array();
             },
             reset_upper_headgear: async () => {
                 const currentUpper = get().headgear_upper;
@@ -552,6 +668,7 @@ export const useStore = create<State>()(
                     const currentChar = get().character;
                     const response = await PostRender(currentChar);
                     set({ character_url: response });
+                    get().update_object_in_array();
                     return;
                 }
                 else if(currentUpper.location === 3){ //Upper & Middle
@@ -565,6 +682,7 @@ export const useStore = create<State>()(
                     const currentChar = get().character;
                     const response = await PostRender(currentChar);
                     set({ character_url: response });
+                    get().update_object_in_array();
                     return;
                 }
                 else if(currentUpper.location === 4){ //Upper & Lower
@@ -578,6 +696,7 @@ export const useStore = create<State>()(
                     const currentChar = get().character;
                     const response = await PostRender(currentChar);
                     set({ character_url: response });
+                    get().update_object_in_array();
                     return;
                 }
                 else if(currentUpper.location === 6){ //Upper & Middle & Lower
@@ -593,6 +712,7 @@ export const useStore = create<State>()(
                     const currentChar = get().character;
                     const response = await PostRender(currentChar);
                     set({ character_url: response });
+                    get().update_object_in_array();
                     return;
                 }
                 else {
@@ -612,6 +732,7 @@ export const useStore = create<State>()(
                     const currentChar = get().character;
                     const response = await PostRender(currentChar);
                     set({ character_url: response });
+                    get().update_object_in_array();
                     return;
                 }
                 else if(currentMiddle.location === 3){ //Upper & Middle
@@ -625,6 +746,7 @@ export const useStore = create<State>()(
                     const currentChar = get().character;
                     const response = await PostRender(currentChar);
                     set({ character_url: response });
+                    get().update_object_in_array();
                     return;
                 }
                 else if(currentMiddle.location === 5){ //Middle & Lower
@@ -638,6 +760,7 @@ export const useStore = create<State>()(
                     const currentChar = get().character;
                     const response = await PostRender(currentChar);
                     set({ character_url: response });
+                    get().update_object_in_array();
                     return;
                 }
                 else if(currentMiddle.location === 6){ //Upper & Middle & Lower
@@ -653,6 +776,7 @@ export const useStore = create<State>()(
                     const currentChar = get().character;
                     const response = await PostRender(currentChar);
                     set({ character_url: response });
+                    get().update_object_in_array();
                     return;
                 }
                 else {
@@ -672,6 +796,7 @@ export const useStore = create<State>()(
                     const currentChar = get().character;
                     const response = await PostRender(currentChar);
                     set({ character_url: response });
+                    get().update_object_in_array();
                     return;
                 }
                 else if(currentLower.location === 4){ //Upper & Lower
@@ -685,6 +810,7 @@ export const useStore = create<State>()(
                     const currentChar = get().character;
                     const response = await PostRender(currentChar);
                     set({ character_url: response });
+                    get().update_object_in_array();
                     return;
                 }
                 else if(currentLower.location === 5){ //Middle & Lower
@@ -698,6 +824,7 @@ export const useStore = create<State>()(
                     const currentChar = get().character;
                     const response = await PostRender(currentChar);
                     set({ character_url: response });
+                    get().update_object_in_array();
                     return;
                 }
                 else if(currentLower.location === 6){ //Upper & Middle & Lower
@@ -713,6 +840,7 @@ export const useStore = create<State>()(
                     const currentChar = get().character;
                     const response = await PostRender(currentChar);
                     set({ character_url: response });
+                    get().update_object_in_array();
                     return;
                 }
                 else {
@@ -726,11 +854,105 @@ export const useStore = create<State>()(
                 const currentChar = get().character;
                 const response = await PostRender(currentChar);
                 set({ character_url: response });
+                get().update_object_in_array();
             },
-            load_character: async () => {
+            load_character_modal: async () => {
+                const { characterList } = get();
+                const updated = [...characterList];
+                for(const [index, char] of updated.entries()){
+                    if(char.exist){
+                        const response = await PostRender(char.character);
+                        updated[index].character_url = response;
+                    }
+                }
+                set({ characterList: updated });
+            },
+            load_file_character: async (character: CharacterData, headgear_upper: HeadgearModel | null, headgear_middle: HeadgearModel | null, headgear_lower: HeadgearModel | null, garment: GarmentModel | null, cash_mount_checked: number, regular_mount_checked: number) => {
+                set((state) => ({
+                    ...state,
+                    character: character,
+                    headgear_upper: headgear_upper,
+                    headgear_middle: headgear_middle,
+                    headgear_lower: headgear_lower,
+                    garment: garment,
+                    cash_mount_checked: cash_mount_checked,
+                    regular_mount_checked: regular_mount_checked,
+                }));
+
                 const currentChar = get().character;
                 const response = await PostRender(currentChar);
                 set({ character_url: response });
+
+                const { characterList } = get();
+                const updated = [...characterList];
+                const idx = characterList.findIndex((x) => x.position === 0);
+                updated[idx].character_url = response;
+                set({ characterList: updated });
+            },
+            open_character_modal: () => {
+                set({ _characterModal: true });
+            },
+            close_character_modal: () => {
+                set({ _characterModal: false });
+            },
+            load_character: (position: number) => {
+                const { characterList } = get();
+                const idx = characterList.findIndex((x) => x.position === position);
+
+                if(idx >= 0){
+                    set((state) => ({
+                        ...state,
+                        name: characterList[idx].name,
+                        character_url: characterList[idx].character_url,
+                        character: characterList[idx].character,
+                        headgear_lower: characterList[idx].headgear_lower,
+                        headgear_middle: characterList[idx].headgear_middle,
+                        headgear_upper: characterList[idx].headgear_upper,
+                        garment: characterList[idx].garment,
+                        cash_mount_checked: characterList[idx].cash_mount_checked,
+                        regular_mount_checked: characterList[idx].regular_mount_checked,
+                        position: characterList[idx].position,
+                    }));
+                }
+            },
+            create_character: async (position: number, name: string) => {
+                const { characterList } = get();
+                const updated = [...characterList];
+                const idx = updated.findIndex((x) => x.position === position);
+
+                if(idx >= 0){
+                    const response = await PostRender(updated[idx].character);
+                    updated[idx] = {
+                        ...updated[idx],
+                        character_url: response,
+                        name: name,
+                        exist: true,
+                    };
+                    set({ characterList: updated });
+                }
+            },
+            delete_character: (pos: number) => {
+                const { characterList, position } = get();
+                const updated = [...characterList];
+                const idx = updated.findIndex((x) => x.position === pos);
+
+                if(idx >= 0){
+                    updated[idx] = {
+                        ...initialCharacter,
+                        position: pos,
+                    };
+                    set({ characterList: updated });
+
+                    if(pos === position){
+                        const idx2 = updated.findIndex((x) => x.exist);
+                        if(idx2 >= 0){
+                            get().load_character(updated[idx2].position);
+                        }
+                        else {
+                            get().create_character(0, 'iRO Wiki Guard');
+                        }
+                    }
+                }
             },
         }),
         {

@@ -22,7 +22,7 @@ const ResetMenuList = () => {
                 color="error"
                 sx={{
                     width: "100%",
-
+                    height: "35px",
                 }}
             >
                 <Typography variant="body2" fontWeight={400} component="span">

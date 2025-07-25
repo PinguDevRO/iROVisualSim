@@ -6,14 +6,15 @@ import Button from '@mui/material/Button';
 import { enqueueSnackbar } from 'notistack'
 import { HeadgearModel } from '@/models/get-headgear';
 import { GarmentModel } from '@/models/get-garment';
-import { useStore, Character } from "@/store/useStore";
+import { useStore, CharacterData } from "@/store/useStore";
 
 
 const ActionButton = () => {
 
     const inputRef = useRef<HTMLInputElement>(null);
     const state = useStore.getState();
-    const load_char = useStore((x) => x.load_character);
+    const load_char = useStore((x) => x.load_file_character);
+    const open_modal = useStore((x) => x.open_character_modal);
 
     const handleButtonClick = () => {
         inputRef.current?.click();
@@ -29,8 +30,7 @@ const ActionButton = () => {
                 const text = e.target?.result as string;
                 const data = JSON.parse(text);
                 if (isValidFullState(data)) {
-                    useStore.setState({ _hasHydrated: false, character_url: null, ...data });
-                    load_char()
+                    load_char(data.character, data.headgear_upper, data.headgear_middle, data.headgear_lower, data.garment, data.cash_mount_checked, data.regular_mount_checked);
                     enqueueSnackbar("Character successfully loaded!", { variant: "success" });
                 }
                 else {
@@ -46,7 +46,7 @@ const ActionButton = () => {
 
     const saveCharacter = () => {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { _hasHydrated, character_url, ...data } = state;
+        const { _hasHydrated, _characterModal, character_url, characterList, name, ...data } = state;
         const json = JSON.stringify(data, null, 2);
         const blob = new Blob([json], { type: "application/json" });
         const url = URL.createObjectURL(blob);
@@ -62,7 +62,7 @@ const ActionButton = () => {
     };
 
     const isValidFullState = (obj: any): obj is {
-        character: Character;
+        character: CharacterData;
         headgear_upper: HeadgearModel | null;
         headgear_middle: HeadgearModel | null;
         headgear_lower: HeadgearModel | null;
@@ -150,8 +150,18 @@ const ActionButton = () => {
             alignItems="center"
             justifyContent="center"
             gap={1}
+            sx={{
+                marginTop: { xs: 0, md: '27px' }
+            }}
         >
-            <Typography variant="body2" fontWeight={700} component="span">
+            <Typography
+                variant="body2"
+                fontWeight={700}
+                component="span"
+                sx={{
+                    display: { xs: 'inline', md: 'none' }
+                }}
+            >
                 Load/Save Character
             </Typography>
             <Box
@@ -175,7 +185,7 @@ const ActionButton = () => {
                     color="error"
                     sx={{
                         width: "100%",
-
+                        display: { xs: 'inline', md: 'none' }
                     }}
                 >
                     <Typography variant="body2" fontWeight={400} component="span">
@@ -188,11 +198,25 @@ const ActionButton = () => {
                     color="error"
                     sx={{
                         width: "100%",
-
+                        display: { xs: 'inline', md: 'none' }
                     }}
                 >
                     <Typography variant="body2" fontWeight={400} component="span">
                         Save
+                    </Typography>
+                </Button>
+                <Button
+                    variant="outlined"
+                    onClick={() => open_modal()}
+                    color="error"
+                    sx={{
+                        width: "100%",
+                        height: "35px",
+                        display: { xs: 'none', md: 'inline' }
+                    }}
+                >
+                    <Typography variant="body2" fontWeight={400} component="span">
+                        Character Selection
                     </Typography>
                 </Button>
             </Box>
