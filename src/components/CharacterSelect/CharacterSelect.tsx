@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import Image from 'next/image';
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
@@ -44,14 +44,18 @@ const CreationModalStyle: SxProps = {
     padding: 2,
 };
 
+type NameModalType = "Rename" | "Create";
+
 const CharacterSelect = () => {
 
     const maxPage = 2;
     const maxChar = 15;
+    const nameModalTypeRef = useRef<NameModalType>("Create");
     const [modalOpen, setModalOpen] = useState<boolean>(false);
     const [name, setName] = useState<string>('');
     const [page, setPage] = useState<number>(1);
     const [hover, setHover] = useState<number | null>(null);
+    const [renameHover, setRenameHover] = useState<boolean>(false);
     const [deleteHover, setDeleteHover] = useState<boolean>(false);
     const [loadHover, setLoadHover] = useState<boolean>(false);
     const [leftArrowHover, setLeftArrowHover] = useState<boolean>(false);
@@ -63,6 +67,7 @@ const CharacterSelect = () => {
     const close = useStore((x) => x.close_character_modal);
     const characters = useStore((x) => x.characterList);
     const load_character = useStore((x) => x.load_character);
+    const update_character_name = useStore((x) => x.update_char_name);
     const create_character = useStore((x) => x.create_character);
     const deleteCharacter = useStore((x) => x.delete_character);
     const load_all_characters = useStore((x) => x.load_character_modal);
@@ -86,12 +91,19 @@ const CharacterSelect = () => {
         }
     };
 
+    const handleOnCharacterRename = () => {
+        if(selectedCharacter !== null && selectedCharacter.exist) {
+            update_character_name(selectedCharacter.position, name);
+            setSelectedCharacter(null);
+            handleOnModalClose();
+        }
+    };
+
     const handleOnCharacterCreation = () => {
         if (selectedCharacter !== null && !selectedCharacter.exist) {
-            setName('');
             create_character(selectedCharacter.position, name);
             setSelectedCharacter(null);
-            handleOnNameModalClose();
+            handleOnModalClose();
         }
     };
 
@@ -109,8 +121,23 @@ const CharacterSelect = () => {
         }
     };
 
-    const handleOnNameModalOpen = () => setModalOpen(true);
-    const handleOnNameModalClose = () => setModalOpen(false);
+    const handleOnNameModalOpen = () => {
+        nameModalTypeRef.current = "Create";
+        setModalOpen(true);
+    };
+
+    const handleOnRenameModalOpen = () => {
+        if(selectedCharacter !== null && selectedCharacter.exist) {
+            nameModalTypeRef.current = "Rename";
+            setName(selectedCharacter.name ? selectedCharacter.name : '');
+            setModalOpen(true);
+        }
+    };
+
+    const handleOnModalClose = () => {
+        setName('');
+        setModalOpen(false);
+    };
 
     const CloseButtonBackground = (isHover: boolean): string => {
         if (isHover) return '/game_interface/bt_close2_over.png';
@@ -127,7 +154,7 @@ const CharacterSelect = () => {
         return '/game_interface/bt_right_off.png';
     };
 
-    const DeleteHoverBackground = (isHover: boolean): string => {
+    const InfoHoverBackground = (isHover: boolean): string => {
         if (isHover) return '/game_interface/bt_info_over.png';
         return '/game_interface/bt_info_normal.png';
     };
@@ -181,6 +208,7 @@ const CharacterSelect = () => {
                             label="Character Name"
                             fullWidth
                             value={name}
+                            autoComplete="off"
                             inputProps={{
                                 maxLength: 30,
                             }}
@@ -198,13 +226,13 @@ const CharacterSelect = () => {
                             <Button
                                 variant='outlined'
                                 disabled={name.length <= 0}
-                                onClick={() => handleOnCharacterCreation()}
+                                onClick={() => nameModalTypeRef.current === 'Create' ? handleOnCharacterCreation() : handleOnCharacterRename()}
                             >
-                                Create
+                                {nameModalTypeRef.current === 'Create' ? 'Create' : 'Rename'}
                             </Button>
                             <Button
                                 variant='outlined'
-                                onClick={handleOnNameModalClose}
+                                onClick={handleOnModalClose}
                             >
                                 Cancel
                             </Button>
@@ -520,7 +548,7 @@ const CharacterSelect = () => {
                             onClick={() => selectedCharacter !== null && selectedCharacter.exist ? handleOnCharacterDeletion() : handleOnNameModalOpen()}
                         >
                             <Image
-                                src={DeleteHoverBackground(deleteHover)}
+                                src={InfoHoverBackground(deleteHover)}
                                 alt={'char deletion'}
                                 width={131}
                                 height={24}
@@ -540,6 +568,51 @@ const CharacterSelect = () => {
                                 }}
                             >
                                 {selectedCharacter !== null && selectedCharacter.exist ? 'Delete' : 'Create'}
+                            </Typography>
+                        </IconButton>
+                        <IconButton
+                            sx={{
+                                display: selectedCharacter !== null && selectedCharacter.exist ? 'inline' : 'none',
+                                p: 0,
+                                m: 0,
+                                width: 131,
+                                height: 24,
+                                backgroundColor: 'transparent',
+                                '&:hover': {
+                                    backgroundColor: 'transparent',
+                                },
+                                position: 'absolute',
+                                top: '58%',
+                                left: '50%',
+                                transform: 'translateX(-50%)',
+                                zIndex: 10
+                            }}
+                            disabled={selectedCharacter === null}
+                            onMouseEnter={() => setRenameHover(true)}
+                            onMouseLeave={() => setRenameHover(false)}
+                            onClick={() => handleOnRenameModalOpen()}
+                        >
+                            <Image
+                                src={InfoHoverBackground(renameHover)}
+                                alt={'char rename'}
+                                width={131}
+                                height={24}
+                                draggable={false}
+                                loading="lazy"
+                            />
+                            <Typography
+                                variant='body2'
+                                sx={{
+                                    position: 'absolute',
+                                    top: '20%',
+                                    left: '50%',
+                                    transform: 'translateX(-50%)',
+                                    color: '#000000',
+                                    fontSize: 12,
+                                    fontFamily: 'Arial',
+                                }}
+                            >
+                                Rename
                             </Typography>
                         </IconButton>
                         <IconButton

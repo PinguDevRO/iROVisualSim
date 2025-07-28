@@ -99,7 +99,7 @@ export const AxiosImage = async (
     .then((response) => {
         return response.data;
     })
-    .then((blob) => {
+    .then((blob: Blob) => {
         const objectURL = URL.createObjectURL(blob);
         return objectURL;
     })

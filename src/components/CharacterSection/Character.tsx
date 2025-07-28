@@ -4,6 +4,7 @@ import Box from '@mui/material/Box';
 import CharacterZoomLens from './CharacterZoomLens';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
+import DownloadIcon from '@mui/icons-material/Download';
 import { useStore, Direction } from "@/store/useStore";
 
 type ButtonDirection = "Left" | "Right";
@@ -15,6 +16,7 @@ const Character = () => {
     const [bodyDirHover, setBodyDirHover] = useState<Direction | null>(null);
     const character = useStore((x) => x.character_url);
     const selectedGender = useStore((x) => x.character.gender);
+    const download_char_image = useStore((x) => x.download_character_image);
     const setSelectedGender = useStore((x) => x.update_char_gender);
     const setHeadDirecion = useStore((x) => x.update_char_headdir);
     const setBodyDirection = useStore((x) => x.update_char_action);
@@ -72,9 +74,34 @@ const Character = () => {
             justifyContent="center"
         >
             <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
-                <Typography variant="body2" fontWeight={700} component="span">
-                    Character
-                </Typography>
+                <Box
+                    height={40}
+                    display="flex"
+                    flexDirection="row"
+                    alignItems="center"
+                    justifyContent="center"
+                    gap={2}
+                >
+                    <Typography variant="body2" fontWeight={700} component="span">
+                        Character
+                    </Typography>
+                    <IconButton
+                        sx={{
+                            display: character !== null ? 'inline' : 'none',
+                            p: 0,
+                            m: 0,
+                            width: 40,
+                            height: 40,
+                            backgroundColor: 'transparent',
+                            '&:hover': {
+                                backgroundColor: 'transparent',
+                            },
+                        }}
+                        onClick={() => download_char_image()}
+                    >
+                        <DownloadIcon color="primary" />
+                    </IconButton>
+                </Box>
                 <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" width={200} height={200} margin={1}>
                     {character !== null ? (
                         <CharacterZoomLens imageUrl={character} />

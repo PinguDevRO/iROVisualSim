@@ -5,6 +5,13 @@ import { persist } from 'zustand/middleware';
 import { regular_mount_list, cash_mount_list, third_job } from '@/constants/joblist';
 import PostRender from '@/services/post-render';
 
+const sanitizeStringOutput = (name: string): string => {
+  return name
+    .trim()
+    .replace(/[/\\?%*:|"<>]/g, '')
+    .replace(/\s+/g, '_');
+}
+
 export type Direction = "Left" | "Right";
 
 export type CharacterData = {
@@ -52,6 +59,7 @@ export type State = {
     position: number;
 
     update_object_in_array: () => void;
+    update_char_name: (position: number, name: string) => void;
     update_char_url: (character_url: string | null) => void;
     update_char_gender: (gender: number) => void;
     update_char_job: (job: string[]) => void;
@@ -74,6 +82,7 @@ export type State = {
     reset_lower_headgear: () => void;
     reset_garment: () => void;
 
+    download_character_image: () => void;
     load_file_character: (character: CharacterData, headgear_upper: HeadgearModel | null, headgear_middle: HeadgearModel | null, headgear_lower: HeadgearModel | null, garment: GarmentModel | null, cash_mount_checked: number, regular_mount_checked: number) => void;
     load_character_modal: () => void;
     open_character_modal: () => void;
@@ -176,6 +185,19 @@ export const useStore = create<State>()(
                         cash_mount_checked: cash_mount_checked,
                         regular_mount_checked: regular_mount_checked,
                         position: position,
+                    };
+                    set({ characterList: updated });
+                }
+            },
+            update_char_name: (position: number, name: string) => {
+                const { characterList } = get();
+                const updated = [...characterList];
+                const idx = updated.findIndex((x) => x.position === position);
+
+                if(idx >= 0){
+                    updated[idx] = {
+                        ...updated[idx],
+                        name: name,
                     };
                     set({ characterList: updated });
                 }
@@ -866,6 +888,20 @@ export const useStore = create<State>()(
                     }
                 }
                 set({ characterList: updated });
+            },
+            download_character_image: () => {
+                const character_url = get().character_url;
+                const name = get().name;
+                if(character_url !== null && name !== null) {
+                    const filename = sanitizeStringOutput(name);
+                    const a = document.createElement('a');
+                    a.href = character_url;
+                    a.download = `${filename}.png`;
+                    document.body.appendChild(a);
+                    a.click();
+
+                    document.body.removeChild(a);
+                }
             },
             load_file_character: async (character: CharacterData, headgear_upper: HeadgearModel | null, headgear_middle: HeadgearModel | null, headgear_lower: HeadgearModel | null, garment: GarmentModel | null, cash_mount_checked: number, regular_mount_checked: number) => {
                 set((state) => ({

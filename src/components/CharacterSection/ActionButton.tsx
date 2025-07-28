@@ -151,7 +151,7 @@ const ActionButton = () => {
             justifyContent="center"
             gap={1}
             sx={{
-                marginTop: { xs: 0, md: '27px' }
+                marginTop: { xs: 0, md: 1 }
             }}
         >
             <Typography
