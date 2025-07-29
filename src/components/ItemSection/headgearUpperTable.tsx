@@ -59,7 +59,7 @@ const HeadgearUpperTable = ({
                             },
                         }}
                     >
-                        <ItemTooltip itemList={x.items} />
+                        <ItemTooltip accessoryId={x.accessoryId} location={x.location} itemList={x.items} />
                     </Box>
                 );
             }}

@@ -3,12 +3,17 @@ import Box from '@mui/material/Box';
 import Tooltip from '@mui/material/Tooltip';
 import { HeadgearItemList } from '@/models/get-headgear';
 import { GarmentItemList } from '@/models/get-garment';
+import { GetHeadgearLocation } from '@/constants/headgearlist';
 import { COLORS } from '@/theme/colors';
 
 
 const ItemTooltip = ({
+    accessoryId,
+    location,
     itemList
 }: {
+    accessoryId: number;
+    location: number;
     itemList: HeadgearItemList[] | GarmentItemList[];
 }) => {
     return itemList.length > 0 ? (
@@ -25,6 +30,11 @@ const ItemTooltip = ({
             }}
             title={
                 <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
+                    <span
+                        key={`tooltip-location-${accessoryId}-${location}`}
+                    >
+                        Location: {GetHeadgearLocation(location)}
+                    </span>
                     {itemList.map((x) => (
                         <span
                             key={`tooltip-text--${x.name}-${x.itemId}`}

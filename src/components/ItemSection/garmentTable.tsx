@@ -52,7 +52,7 @@ const GarmentTable = ({
                             },
                         }}
                     >
-                        <ItemTooltip itemList={x.items} />
+                        <ItemTooltip accessoryId={x.garmentId} location={7} itemList={x.items} />
                     </Box>
                 );
             }}

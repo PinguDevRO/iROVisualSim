@@ -13,6 +13,7 @@ import HeadgearLowerTable from './headgearLowerTable';
 import GarmentTable from './garmentTable';
 import { HeadgearModel } from '@/models/get-headgear';
 import { GarmentModel } from '@/models/get-garment';
+import { GetHeadgearLocation } from '@/constants/headgearlist';
 import { COLORS } from '@/theme/colors';
 import { useStore } from '@/store/useStore';
 
@@ -132,6 +133,11 @@ const ItemSection = ({
                             }}
                             title={upperHeadgear !== null && upperHeadgear.items && upperHeadgear.items.length > 0 ? (
                                 <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
+                                    <span
+                                        key={`tooltip-selected-upper-location--${upperHeadgear.location}`}
+                                    >
+                                        Location: {GetHeadgearLocation(upperHeadgear.location)}
+                                    </span>
                                     {upperHeadgear.items.map((x) => (
                                         <span
                                             key={`tooltip-selected-upper-text--${x.name}-${x.itemId}`}
@@ -224,6 +230,11 @@ const ItemSection = ({
                             }}
                             title={middleHeadgear !== null && middleHeadgear.items && middleHeadgear.items.length > 0 ? (
                                 <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
+                                    <span
+                                        key={`tooltip-selected-middle-location--${middleHeadgear.location}`}
+                                    >
+                                        Location: {GetHeadgearLocation(middleHeadgear.location)}
+                                    </span>
                                     {middleHeadgear.items.map((x) => (
                                         <span
                                             key={`tooltip-selected-middle-text--${x.name}-${x.itemId}`}
@@ -316,6 +327,11 @@ const ItemSection = ({
                             }}
                             title={lowerHeadgear !== null && lowerHeadgear.items && lowerHeadgear.items.length > 0 ? (
                                 <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
+                                    <span
+                                        key={`tooltip-selected-lower-location--${lowerHeadgear.location}`}
+                                    >
+                                        Location: {GetHeadgearLocation(lowerHeadgear.location)}
+                                    </span>
                                     {lowerHeadgear.items.map((x) => (
                                         <span
                                             key={`tooltip-selected-lower-text--${x.name}-${x.itemId}`}
