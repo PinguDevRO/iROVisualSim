@@ -53,12 +53,12 @@ const HairStyleList = () => {
                                 }}
                             >
                                 <Image
-                                    src={`/head/img_hairstyle${x}.gif`}
+                                    src={`/head/img_hairstyle${x}.png`}
                                     alt={x}
-                                    width={30}
-                                    height={28}
+                                    width={26}
+                                    height={24}
                                     draggable={false}
-                                    loading="lazy"
+                                    loading="eager"
                                 />
                             </Box>
                         </IconButton>
@@ -90,12 +90,12 @@ const HairStyleList = () => {
                                     }}
                                 >
                                     <Image
-                                        src={`/head/img_hairstyle_doramboy${x}.gif`}
+                                        src={`/head/img_hairstyle_doramboy${x}.png`}
                                         alt={x}
-                                        width={30}
-                                        height={28}
+                                        width={26}
+                                        height={24}
                                         draggable={false}
-                                        loading="lazy"
+                                        loading="eager"
                                     />
                                 </Box>
                             </IconButton>
@@ -127,12 +127,12 @@ const HairStyleList = () => {
                                         }}
                                     >
                                         <Image
-                                            src={`/head/img_hairstyle_girl${x}.gif`}
+                                            src={`/head/img_hairstyle_girl${x}.png`}
                                             alt={x}
-                                            width={30}
-                                            height={28}
+                                            width={26}
+                                            height={24}
                                             draggable={false}
-                                            loading="lazy"
+                                            loading="eager"
                                         />
                                     </Box>
                                 </IconButton>
@@ -164,12 +164,12 @@ const HairStyleList = () => {
                                             }}
                                         >
                                             <Image
-                                                src={`/head/img_hairstyle_doramgirl${x}.gif`}
+                                                src={`/head/img_hairstyle_doramgirl${x}.png`}
                                                 alt={x}
-                                                width={30}
-                                                height={28}
+                                                width={26}
+                                                height={24}
                                                 draggable={false}
-                                                loading="lazy"
+                                                loading="eager"
                                             />
                                         </Box>
                                     </IconButton>

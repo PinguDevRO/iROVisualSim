@@ -265,7 +265,7 @@ const CharacterSelect = () => {
                         width={17}
                         height={18}
                         draggable={false}
-                        loading="lazy"
+                        loading="eager"
                     />
                 </IconButton>
                 <Box
@@ -296,7 +296,7 @@ const CharacterSelect = () => {
                                     fill
                                     style={{ objectFit: 'contain' }}
                                     draggable={false}
-                                    loading="lazy"
+                                    loading="eager"
                                 />
                                 {val.character_url !== null ? (
                                     <>
@@ -310,7 +310,7 @@ const CharacterSelect = () => {
                                                 transform: 'translateY(-15px)'
                                             }}
                                             draggable={false}
-                                            loading="lazy"
+                                            loading="eager"
                                         />
                                         <Image
                                             src={`/job/icon_jobs_${val.character.job[0]}.png`}
@@ -324,7 +324,7 @@ const CharacterSelect = () => {
                                                 transform: 'translateX(-50%)',
                                             }}
                                             draggable={false}
-                                            loading="lazy"
+                                            loading="eager"
                                         />
                                         <Typography
                                             variant='body2'
@@ -365,7 +365,7 @@ const CharacterSelect = () => {
                             fill
                             style={{ objectFit: 'contain' }}
                             draggable={false}
-                            loading="lazy"
+                            loading="eager"
                         />
                         <Box
                             display="flex"
@@ -553,7 +553,7 @@ const CharacterSelect = () => {
                                 width={131}
                                 height={24}
                                 draggable={false}
-                                loading="lazy"
+                                loading="eager"
                             />
                             <Typography
                                 variant='body2'
@@ -598,7 +598,7 @@ const CharacterSelect = () => {
                                 width={131}
                                 height={24}
                                 draggable={false}
-                                loading="lazy"
+                                loading="eager"
                             />
                             <Typography
                                 variant='body2'
@@ -642,7 +642,7 @@ const CharacterSelect = () => {
                                 width={165}
                                 height={110}
                                 draggable={false}
-                                loading="lazy"
+                                loading="eager"
                             />
                             <Typography
                                 variant='body2'
@@ -703,7 +703,7 @@ const CharacterSelect = () => {
                                 width={21}
                                 height={28}
                                 draggable={false}
-                                loading="lazy"
+                                loading="eager"
                             />
                         </IconButton>
                         <IconButton
@@ -732,7 +732,7 @@ const CharacterSelect = () => {
                                 width={21}
                                 height={28}
                                 draggable={false}
-                                loading="lazy"
+                                loading="eager"
                             />
                         </IconButton>
                         <Typography
