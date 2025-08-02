@@ -1,15 +1,27 @@
 import { create } from 'zustand';
 import { HeadgearModel } from '@/models/get-headgear';
 import { GarmentModel } from '@/models/get-garment';
+import { PriorityLayerModel } from '@/models/get-prioritylayer';
 import { persist } from 'zustand/middleware';
 import { regular_mount_list, cash_mount_list, third_job } from '@/constants/joblist';
 import PostRender from '@/services/post-render';
 
 const sanitizeStringOutput = (name: string): string => {
-  return name
-    .trim()
-    .replace(/[/\\?%*:|"<>]/g, '')
-    .replace(/\s+/g, '_');
+    return name
+        .trim()
+        .replace(/[/\\?%*:|"<>]/g, '')
+        .replace(/\s+/g, '_');
+};
+
+const getPriorityLayer = (priorityLayer: PriorityLayerModel | undefined, accessoryId: number): number | null => {
+    if (priorityLayer === undefined) return null;
+
+    const idx = priorityLayer.itemList.findIndex((x) => x.accessoryId === accessoryId);
+    if (idx >= 0) {
+        return priorityLayer.itemList[idx].layer;
+    }
+
+    return null;
 }
 
 export type Direction = "Left" | "Right";
@@ -23,6 +35,7 @@ export type CharacterData = {
     headgear: number[];
     garment: number;
     bodyPalette: number;
+    madogearType: number;
     action: number;
     canvas: string;
     outfit: number;
@@ -45,6 +58,7 @@ export type Character = {
 export type State = {
     _hasHydrated: boolean;
     _characterModal: boolean;
+    _priorityLayer: PriorityLayerModel | undefined;
     characterList: Character[];
 
     name: string | null;
@@ -58,6 +72,7 @@ export type State = {
     regular_mount_checked: number;
     position: number;
 
+    update_priority_layer: (_priorityLayer: PriorityLayerModel | undefined) => void;
     update_object_in_array: () => void;
     update_char_name: (position: number, name: string) => void;
     update_char_url: (character_url: string | null) => void;
@@ -69,6 +84,7 @@ export type State = {
     update_char_headgear: (headgear: HeadgearModel | null) => void;
     update_char_garment: (garment: GarmentModel | null) => void;
     update_char_bodyPalette: (bodyPalette: number) => void;
+    update_char_madogearType: (madogearType: number) => void;
     update_char_action: (action: Direction) => void;
     update_char_movement_action: (action: number) => void;
     update_char_outfit: (outfit: number) => void;
@@ -105,6 +121,7 @@ export const initialCharacter: Character = {
         headgear: [0, 0, 0],
         garment: 0,
         bodyPalette: 0,
+        madogearType: 0,
         action: 0,
         canvas: "200x200+100+150",
         outfit: 0,
@@ -121,6 +138,7 @@ export const initialCharacter: Character = {
 export const initialState = {
     _hasHydrated: false,
     _characterModal: false,
+    _priorityLayer: undefined,
     characterList: Array.from({ length: 30 }, (_, i) => ({
         ...initialCharacter,
         position: i,
@@ -137,6 +155,7 @@ export const initialState = {
         headgear: [0, 0, 0],
         garment: 0,
         bodyPalette: 0,
+        madogearType: 0,
         action: 0,
         canvas: "200x200+100+150",
         outfit: 0,
@@ -155,6 +174,9 @@ export const useStore = create<State>()(
         (set, get) => ({
             ...initialState,
 
+            update_priority_layer: (_priorityLayer: PriorityLayerModel | undefined) => {
+                set({ _priorityLayer });
+            },
             update_object_in_array: () => {
                 const {
                     characterList,
@@ -172,7 +194,7 @@ export const useStore = create<State>()(
                 const updated = [...characterList];
                 const idx = updated.findIndex((x) => x.position === position);
 
-                if(idx >= 0){
+                if (idx >= 0) {
                     updated[idx] = {
                         exist: true,
                         name: name,
@@ -194,7 +216,7 @@ export const useStore = create<State>()(
                 const updated = [...characterList];
                 const idx = updated.findIndex((x) => x.position === position);
 
-                if(idx >= 0){
+                if (idx >= 0) {
                     updated[idx] = {
                         ...updated[idx],
                         name: name,
@@ -218,26 +240,30 @@ export const useStore = create<State>()(
                 const regular_mount = get().regular_mount_checked;
                 const newJob = parseInt(job[0]);
 
-                if([20, 4021, 4069, 4264, 4212, 4305].indexOf(newJob) >= 0){ // Female class only
+                if ([20, 4021, 4069, 4264, 4212, 4305].indexOf(newJob) >= 0) { // Female class only
                     set((state) => ({ character: { ...state.character, gender: 0 } }));
                 }
 
-                if([19, 4020, 4068, 4263, 4211, 4304].indexOf(newJob) >= 0){ // Male class only
+                if ([19, 4020, 4068, 4263, 4211, 4304].indexOf(newJob) >= 0) { // Male class only
                     set((state) => ({ character: { ...state.character, gender: 1 } }));
                 }
 
-                if(!third_job.some((x) => x.id === newJob)){
+                if (!third_job.some((x) => x.id === newJob)) {
                     set((state) => ({ character: { ...state.character, outfit: 0 } }));
                 }
 
-                if([4218, 4308].indexOf(newJob) >= 0){ // Checking Doram
+                if ([4218, 4308].indexOf(newJob) >= 0) { // Checking Doram
                     const head = get().character.head;
-                    if(head > 10){
+                    if (head > 10) {
                         set((state) => ({ character: { ...state.character, head: 1 } }));
                     }
                 }
 
-                if(cash_mount === 1){
+                if ([4087, 4279].indexOf(newJob) === -1) {
+                    set((state) => ({ character: { ...state.character, madogearType: 0 } }));
+                }
+
+                if (cash_mount === 1) {
                     let found = false;
                     for (const [strKey, val] of Object.entries(cash_mount_list)) {
                         const key = Number(strKey);
@@ -247,13 +273,13 @@ export const useStore = create<State>()(
                             break;
                         }
                     }
-                    if(!found){
+                    if (!found) {
                         set((state) => ({ character: { ...state.character, job } }));
                         set(() => ({ cash_mount_checked: 0 }));
                     }
                 }
 
-                else if(regular_mount === 1){
+                else if (regular_mount === 1) {
                     let found = false;
                     for (const [strKey, val] of Object.entries(regular_mount_list)) {
                         const key = Number(strKey);
@@ -263,7 +289,7 @@ export const useStore = create<State>()(
                             break;
                         }
                     }
-                    if(!found){
+                    if (!found) {
                         set((state) => ({ character: { ...state.character, job } }));
                         set(() => ({ regular_mount_checked: 0 }));
                     }
@@ -315,234 +341,57 @@ export const useStore = create<State>()(
                 get().update_object_in_array();
             },
             update_char_headgear: async (headgear: HeadgearModel | null) => {
-                if(headgear === null) return;
+                if (!headgear) return;
 
-                if(headgear.location === 0){ //Upper
-                    const currentHeadgear = get().headgear_upper;
-                    if(currentHeadgear !== null && currentHeadgear.location === 3){ //Upper & Middle
-                        const newHeadgear = get().character.headgear;
-                        newHeadgear[0] = headgear.accessoryId;
-                        newHeadgear[1] = 0;
-                        set((state) => ({ character: { ...state.character, headgear: newHeadgear } }));
-                        set(() => ({ headgear_upper: headgear }));
-                        set(() => ({ headgear_middle: initialState.headgear_middle }));
-                    }
-                    else if(currentHeadgear !== null && currentHeadgear.location === 4){ //Upper & Lower
-                        const newHeadgear = get().character.headgear;
-                        newHeadgear[0] = headgear.accessoryId;
-                        newHeadgear[2] = 0;
-                        set((state) => ({ character: { ...state.character, headgear: newHeadgear } }));
-                        set(() => ({ headgear_upper: headgear }));
-                        set(() => ({ headgear_lower: initialState.headgear_lower }));
-                    }
-                    else if(currentHeadgear !== null && currentHeadgear.location === 6){ //Upper & Middle & Lower
-                        const newHeadgear = get().character.headgear;
-                        newHeadgear[0] = headgear.accessoryId;
-                        newHeadgear[1] = 0;
-                        newHeadgear[2] = 0;
-                        set((state) => ({ character: { ...state.character, headgear: newHeadgear } }));
-                        set(() => ({ headgear_upper: headgear }));
-                        set(() => ({ headgear_middle: initialState.headgear_middle }));
-                        set(() => ({ headgear_lower: initialState.headgear_lower }));
-                    }
-                    else {
-                        const newHeadgear = get().character.headgear;
-                        newHeadgear[0] = headgear.accessoryId;
-                        set((state) => ({ character: { ...state.character, headgear: newHeadgear } }));
-                        set(() => ({ headgear_upper: headgear }));
-                    }
+                const SLOT_NAMES = ['upper', 'middle', 'lower'] as const;
+                const SLOT_BITS = [1, 2, 4];
+                const MASK_MAP = [1, 2, 4, 3, 5, 6, 7] as const;
 
-                    const currentChar = get().character;
-                    const response = await PostRender(currentChar);
-                    set({ character_url: response });
-                    get().update_object_in_array();
-                    return;
-                }
-                else if(headgear.location === 1){ //Middle
-                    const currentHeadgear = get().headgear_middle;
-                    if(currentHeadgear !== null && currentHeadgear.location === 3){ //Upper & Middle
-                        const newHeadgear = get().character.headgear;
-                        newHeadgear[0] = 0;
-                        newHeadgear[1] = headgear.accessoryId;
-                        set((state) => ({ character: { ...state.character, headgear: newHeadgear } }));
-                        set(() => ({ headgear_upper: initialState.headgear_upper }));
-                        set(() => ({ headgear_middle: headgear }));
-                    }
-                    else if(currentHeadgear !== null && currentHeadgear.location === 5){ //Middle & Lower
-                        const newHeadgear = get().character.headgear;
-                        newHeadgear[1] = headgear.accessoryId;
-                        newHeadgear[2] = 0;
-                        set((state) => ({ character: { ...state.character, headgear: newHeadgear } }));
-                        set(() => ({ headgear_middle: headgear }));
-                        set(() => ({ headgear_lower: initialState.headgear_lower }));
-                    }
-                    else if(currentHeadgear !== null && currentHeadgear.location === 6){ //Upper & Middle & Lower
-                        const newHeadgear = get().character.headgear;
-                        newHeadgear[0] = 0;
-                        newHeadgear[1] = headgear.accessoryId;
-                        newHeadgear[2] = 0;
-                        set((state) => ({ character: { ...state.character, headgear: newHeadgear } }));
-                        set(() => ({ headgear_upper: initialState.headgear_upper }));
-                        set(() => ({ headgear_middle: headgear }));
-                        set(() => ({ headgear_lower: initialState.headgear_lower }));
-                    }
-                    else {
-                        const newHeadgear = get().character.headgear;
-                        newHeadgear[1] = headgear.accessoryId;
-                        set((state) => ({ character: { ...state.character, headgear: newHeadgear } }));
-                        set(() => ({ headgear_middle: headgear }));
-                    }
+                const DEFAULT_PRIORITY = { middle: 100, upper: 200, lower: 300 } as const;
+                const newBits = MASK_MAP[headgear.location];
 
-                    const currentChar = get().character;
-                    const response = await PostRender(currentChar);
-                    set({ character_url: response });
-                    get().update_object_in_array();
-                    return;
-                }
-                else if(headgear.location === 2){ //Lower
-                    const currentHeadgear = get().headgear_lower;
-                    if(currentHeadgear !== null && currentHeadgear.location === 4){ //Upper & Lower
-                        const newHeadgear = get().character.headgear;
-                        newHeadgear[0] = 0;
-                        newHeadgear[2] = headgear.accessoryId;
-                        set((state) => ({ character: { ...state.character, headgear: newHeadgear } }));
-                        set(() => ({ headgear_upper: initialState.headgear_upper }));
-                        set(() => ({ headgear_lower: headgear }));
+                const toClear = [false, false, false];
+                for (let i = 0; i < 3; i++) {
+                    const cur = get()[`headgear_${SLOT_NAMES[i]}`] as HeadgearModel | null;
+                    if (!cur) continue;
+                    const curBits = MASK_MAP[cur.location];
+                    if (curBits !== SLOT_BITS[i] && (curBits & newBits) !== 0) {
+                        for (let j = 0; j < 3; j++) {
+                            if (curBits & SLOT_BITS[j]) toClear[j] = true;
+                        }
                     }
-                    else if(currentHeadgear !== null && currentHeadgear.location === 5){ //Middle & Lower
-                        const newHeadgear = get().character.headgear;
-                        newHeadgear[1] = 0;
-                        newHeadgear[2] = headgear.accessoryId;
-                        set((state) => ({ character: { ...state.character, headgear: newHeadgear } }));
-                        set(() => ({ headgear_middle: initialState.headgear_middle }));
-                        set(() => ({ headgear_lower: headgear }));
-                    }
-                    else if(currentHeadgear !== null && currentHeadgear.location === 6){ //Upper & Middle & Lower
-                        const newHeadgear = get().character.headgear;
-                        newHeadgear[0] = 0;
-                        newHeadgear[1] = 0;
-                        newHeadgear[2] = headgear.accessoryId;
-                        set((state) => ({ character: { ...state.character, headgear: newHeadgear } }));
-                        set(() => ({ headgear_upper: initialState.headgear_upper }));
-                        set(() => ({ headgear_middle: initialState.headgear_middle }));
-                        set(() => ({ headgear_lower: headgear }));
-                    }
-                    else {
-                        const newHeadgear = get().character.headgear;
-                        newHeadgear[2] = headgear.accessoryId;
-                        set((state) => ({ character: { ...state.character, headgear: newHeadgear } }));
-                        set(() => ({ headgear_lower: headgear }));
-                    }
+                };
 
-                    const currentChar = get().character;
-                    const response = await PostRender(currentChar);
-                    set({ character_url: response });
-                    get().update_object_in_array();
-                    return;
-                }
-                else if(headgear.location === 3){ //Upper & Middle
-                    const currentLower = get().headgear_lower;
-                    if(currentLower !== null && currentLower.location >= 4){
-                        const newHeadgear = get().character.headgear;
-                        newHeadgear[0] = headgear.accessoryId;
-                        newHeadgear[1] = headgear.accessoryId;
-                        newHeadgear[2] = 0;
-                        set((state) => ({ character: { ...state.character, headgear: newHeadgear } }));
-                        set(() => ({ headgear_upper: headgear }));
-                        set(() => ({ headgear_middle: headgear }));
-                        set(() => ({ headgear_lower: initialState.headgear_lower }));
+                toClear.forEach((doClean, i) => {
+                    if (doClean) {
+                        set(() => ({ [`headgear_${SLOT_NAMES[i]}`]: initialState[`headgear_${SLOT_NAMES[i]}`] }));
                     }
-                    else {
-                        const newHeadgear = get().character.headgear;
-                        newHeadgear[0] = headgear.accessoryId;
-                        newHeadgear[1] = headgear.accessoryId;
-                        set((state) => ({ character: { ...state.character, headgear: newHeadgear } }));
-                        set(() => ({ headgear_upper: headgear }));
-                        set(() => ({ headgear_middle: headgear }));
-                    }
+                });
 
-                    const currentChar = get().character;
-                    const response = await PostRender(currentChar);
-                    set({ character_url: response });
-                    get().update_object_in_array();
-                    return;
-                }
-                else if(headgear.location === 4){ //Upper & Lower
-                    const currentMiddle = get().headgear_upper;
-                    if(currentMiddle !== null && (currentMiddle.location === 3 || currentMiddle.location >= 5)){
-                        const newHeadgear = get().character.headgear;
-                        newHeadgear[0] = headgear.accessoryId;
-                        newHeadgear[1] = 0;
-                        newHeadgear[2] = headgear.accessoryId;
-                        set((state) => ({ character: { ...state.character, headgear: newHeadgear } }));
-                        set(() => ({ headgear_upper: headgear }));
-                        set(() => ({ headgear_middle: initialState.headgear_middle }));
-                        set(() => ({ headgear_lower: headgear }));
+                for (let i = 0; i < 3; i++) {
+                    if (newBits & SLOT_BITS[i]) {
+                        set(() => ({ [`headgear_${SLOT_NAMES[i]}`]: headgear }));
                     }
-                    else {
-                        const newHeadgear = get().character.headgear;
-                        newHeadgear[0] = headgear.accessoryId;
-                        newHeadgear[2] = headgear.accessoryId;
-                        set((state) => ({ character: { ...state.character, headgear: newHeadgear } }));
-                        set(() => ({ headgear_upper: headgear }));
-                        set(() => ({ headgear_lower: headgear }));
-                    }
+                };
 
-                    const currentChar = get().character;
-                    const response = await PostRender(currentChar);
-                    set({ character_url: response });
-                    get().update_object_in_array();
-                    return;
-                }
-                else if(headgear.location === 5){ //Middle & Lower
-                    const currentUpper = get().headgear_upper;
-                    if(currentUpper !== null && (currentUpper.location === 3 || currentUpper.location === 4 || currentUpper.location === 6)){
-                        const newHeadgear = get().character.headgear;
-                        newHeadgear[0] = 0;
-                        newHeadgear[1] = headgear.accessoryId;
-                        newHeadgear[2] = headgear.accessoryId;
-                        set((state) => ({ character: { ...state.character, headgear: newHeadgear } }));
-                        set(() => ({ headgear_upper: initialState.headgear_upper }));
-                        set(() => ({ headgear_middle: headgear }));
-                        set(() => ({ headgear_lower: headgear }));
-                    }
-                    else {
-                        const newHeadgear = get().character.headgear;
-                        newHeadgear[1] = headgear.accessoryId;
-                        newHeadgear[2] = headgear.accessoryId;
-                        set((state) => ({ character: { ...state.character, headgear: newHeadgear } }));
-                        set(() => ({ headgear_middle: headgear }));
-                        set(() => ({ headgear_lower: headgear }));
-                    }
+                type Entry = { id: number, priority: number };
+                const entries: Entry[] = SLOT_NAMES.map(slot => {
+                    const model = get()[`headgear_${slot}`] as HeadgearModel | null;
+                    const id = model?.accessoryId ?? 0;
+                    const itemPriority = model !== null ? getPriorityLayer(get()._priorityLayer, model.accessoryId) : null;
+                    return { id, priority: itemPriority !== null ? itemPriority : DEFAULT_PRIORITY[slot] };
+                });
 
-                    const currentChar = get().character;
-                    const response = await PostRender(currentChar);
-                    set({ character_url: response });
-                    get().update_object_in_array();
-                    return;
-                }
-                else if(headgear.location === 6){ //Upper & Middle & Lower
-                    const newHeadgear = get().character.headgear;
-                    newHeadgear[0] = headgear.accessoryId;
-                    newHeadgear[1] = headgear.accessoryId;
-                    newHeadgear[2] = headgear.accessoryId;
-                    set((state) => ({ character: { ...state.character, headgear: newHeadgear } }));
-                    set(() => ({ headgear_upper: headgear }));
-                    set(() => ({ headgear_middle: headgear }));
-                    set(() => ({ headgear_lower: headgear }));
+                entries.sort((a, b) => a.priority - b.priority);
+                const headgearPriority = entries.map(e => e.id);
 
-                    const currentChar = get().character;
-                    const response = await PostRender(currentChar);
-                    set({ character_url: response });
-                    get().update_object_in_array();
-                    return;
-                }
-                else {
-                    return;
-                }
+                set(state => ({ character: { ...state.character, headgear: headgearPriority } }));
+                const resp = await PostRender(get().character);
+                set({ character_url: resp });
+                get().update_object_in_array();
             },
             update_char_garment: async (garment: GarmentModel | null) => {
-                if(garment === null) return;
+                if (garment === null) return;
 
                 set((state) => ({ character: { ...state.character, garment: garment.garmentId } }));
                 set(() => ({ garment }));
@@ -554,6 +403,24 @@ export const useStore = create<State>()(
             },
             update_char_bodyPalette: async (bodyPalette: number) => {
                 set((state) => ({ character: { ...state.character, bodyPalette } }));
+                const currentChar = get().character;
+                const response = await PostRender(currentChar);
+                set({ character_url: response });
+                get().update_object_in_array();
+            },
+            update_char_madogearType: async (madogearType: number) => {
+                const madogearJob = [4087, 4279];
+                const currentJob = parseInt(get().character.job[0]);
+                const isAMadogearJob = madogearJob.findIndex((x) => x === currentJob);
+
+                if(isAMadogearJob >= 0) {
+                    set((state) => ({ character: { ...state.character, madogearType } }));
+                }
+
+                if(isAMadogearJob === -1) {
+                    set((state) => ({ character: { ...state.character, madogearType: 0 } }));
+                }
+
                 const currentChar = get().character;
                 const response = await PostRender(currentChar);
                 set({ character_url: response });
@@ -678,196 +545,132 @@ export const useStore = create<State>()(
                 get().update_object_in_array();
             },
             reset_upper_headgear: async () => {
+                const SLOT_NAMES = ['upper', 'middle', 'lower'] as const;
+                const DEFAULT_PRIORITY = { middle: 100, upper: 200, lower: 300 } as const;
                 const currentUpper = get().headgear_upper;
-                if(currentUpper === null) return;
+                if (currentUpper === null) return;
 
-                if(currentUpper.location === 0){ //Upper
-                    const newHeadgear = get().character.headgear;
-                    newHeadgear[0] = 0;
-                    set((state) => ({ character: { ...state.character, headgear: newHeadgear } }));
+                if (currentUpper.location === 0) { //Upper
                     set(() => ({ headgear_upper: initialState.headgear_upper }));
-
-                    const currentChar = get().character;
-                    const response = await PostRender(currentChar);
-                    set({ character_url: response });
-                    get().update_object_in_array();
-                    return;
                 }
-                else if(currentUpper.location === 3){ //Upper & Middle
-                    const newHeadgear = get().character.headgear;
-                    newHeadgear[0] = 0;
-                    newHeadgear[1] = 0;
-                    set((state) => ({ character: { ...state.character, headgear: newHeadgear } }));
+                if (currentUpper.location === 3) { //Upper & Middle
                     set(() => ({ headgear_upper: initialState.headgear_upper }));
                     set(() => ({ headgear_middle: initialState.headgear_middle }));
-
-                    const currentChar = get().character;
-                    const response = await PostRender(currentChar);
-                    set({ character_url: response });
-                    get().update_object_in_array();
-                    return;
                 }
-                else if(currentUpper.location === 4){ //Upper & Lower
-                    const newHeadgear = get().character.headgear;
-                    newHeadgear[0] = 0;
-                    newHeadgear[2] = 0;
-                    set((state) => ({ character: { ...state.character, headgear: newHeadgear } }));
+                if (currentUpper.location === 4) { //Upper & Lower
                     set(() => ({ headgear_upper: initialState.headgear_upper }));
                     set(() => ({ headgear_lower: initialState.headgear_lower }));
-
-                    const currentChar = get().character;
-                    const response = await PostRender(currentChar);
-                    set({ character_url: response });
-                    get().update_object_in_array();
-                    return;
                 }
-                else if(currentUpper.location === 6){ //Upper & Middle & Lower
-                    const newHeadgear = get().character.headgear;
-                    newHeadgear[0] = 0;
-                    newHeadgear[1] = 0;
-                    newHeadgear[2] = 0;
-                    set((state) => ({ character: { ...state.character, headgear: newHeadgear } }));
+                if (currentUpper.location === 6) { //Upper & Middle & Lower
                     set(() => ({ headgear_upper: initialState.headgear_upper }));
                     set(() => ({ headgear_middle: initialState.headgear_middle }));
                     set(() => ({ headgear_lower: initialState.headgear_lower }));
+                }
 
-                    const currentChar = get().character;
-                    const response = await PostRender(currentChar);
-                    set({ character_url: response });
-                    get().update_object_in_array();
-                    return;
-                }
-                else {
-                    return;
-                }
+                type Entry = { id: number, priority: number };
+                const entries: Entry[] = SLOT_NAMES.map(slot => {
+                    const model = get()[`headgear_${slot}`] as HeadgearModel | null;
+                    const id = model?.accessoryId ?? 0;
+                    const itemPriority = model !== null ? getPriorityLayer(get()._priorityLayer, model.accessoryId) : null;
+                    return { id, priority: itemPriority !== null ? itemPriority : DEFAULT_PRIORITY[slot] };
+                });
+
+                entries.sort((a, b) => a.priority - b.priority);
+                const headgearPriority = entries.map(e => e.id);
+
+                set(state => ({ character: { ...state.character, headgear: headgearPriority } }));
+                
+                const currentChar = get().character;
+                const response = await PostRender(currentChar);
+                set({ character_url: response });
+                get().update_object_in_array();
+                return;
             },
             reset_middle_headgear: async () => {
+                const SLOT_NAMES = ['upper', 'middle', 'lower'] as const;
+                const DEFAULT_PRIORITY = { middle: 100, upper: 200, lower: 300 } as const;
                 const currentMiddle = get().headgear_middle;
-                if(currentMiddle === null) return;
+                if (currentMiddle === null) return;
 
-                if(currentMiddle.location === 1){ //Middle
-                    const newHeadgear = get().character.headgear;
-                    newHeadgear[1] = 0;
-                    set((state) => ({ character: { ...state.character, headgear: newHeadgear } }));
+                if (currentMiddle.location === 1) { //Middle
                     set(() => ({ headgear_middle: initialState.headgear_middle }));
-
-                    const currentChar = get().character;
-                    const response = await PostRender(currentChar);
-                    set({ character_url: response });
-                    get().update_object_in_array();
-                    return;
                 }
-                else if(currentMiddle.location === 3){ //Upper & Middle
-                    const newHeadgear = get().character.headgear;
-                    newHeadgear[0] = 0;
-                    newHeadgear[1] = 0;
-                    set((state) => ({ character: { ...state.character, headgear: newHeadgear } }));
+                if (currentMiddle.location === 3) { //Upper & Middle
                     set(() => ({ headgear_upper: initialState.headgear_upper }));
                     set(() => ({ headgear_middle: initialState.headgear_middle }));
-
-                    const currentChar = get().character;
-                    const response = await PostRender(currentChar);
-                    set({ character_url: response });
-                    get().update_object_in_array();
-                    return;
                 }
-                else if(currentMiddle.location === 5){ //Middle & Lower
-                    const newHeadgear = get().character.headgear;
-                    newHeadgear[1] = 0;
-                    newHeadgear[2] = 0;
-                    set((state) => ({ character: { ...state.character, headgear: newHeadgear } }));
+                if (currentMiddle.location === 5) { //Middle & Lower
                     set(() => ({ headgear_middle: initialState.headgear_middle }));
                     set(() => ({ headgear_lower: initialState.headgear_lower }));
-
-                    const currentChar = get().character;
-                    const response = await PostRender(currentChar);
-                    set({ character_url: response });
-                    get().update_object_in_array();
-                    return;
                 }
-                else if(currentMiddle.location === 6){ //Upper & Middle & Lower
-                    const newHeadgear = get().character.headgear;
-                    newHeadgear[0] = 0;
-                    newHeadgear[1] = 0;
-                    newHeadgear[2] = 0;
-                    set((state) => ({ character: { ...state.character, headgear: newHeadgear } }));
+                if (currentMiddle.location === 6) { //Upper & Middle & Lower
                     set(() => ({ headgear_upper: initialState.headgear_upper }));
                     set(() => ({ headgear_middle: initialState.headgear_middle }));
                     set(() => ({ headgear_lower: initialState.headgear_lower }));
 
-                    const currentChar = get().character;
-                    const response = await PostRender(currentChar);
-                    set({ character_url: response });
-                    get().update_object_in_array();
-                    return;
+                    
                 }
-                else {
-                    return;
-                }
+
+                type Entry = { id: number, priority: number };
+                const entries: Entry[] = SLOT_NAMES.map(slot => {
+                    const model = get()[`headgear_${slot}`] as HeadgearModel | null;
+                    const id = model?.accessoryId ?? 0;
+                    const itemPriority = model !== null ? getPriorityLayer(get()._priorityLayer, model.accessoryId) : null;
+                    return { id, priority: itemPriority !== null ? itemPriority : DEFAULT_PRIORITY[slot] };
+                });
+
+                entries.sort((a, b) => a.priority - b.priority);
+                const headgearPriority = entries.map(e => e.id);
+
+                set(state => ({ character: { ...state.character, headgear: headgearPriority } }));
+
+                const currentChar = get().character;
+                const response = await PostRender(currentChar);
+                set({ character_url: response });
+                get().update_object_in_array();
+                return;
             },
             reset_lower_headgear: async () => {
+                const SLOT_NAMES = ['upper', 'middle', 'lower'] as const;
+                const DEFAULT_PRIORITY = { middle: 100, upper: 200, lower: 300 } as const;
                 const currentLower = get().headgear_lower;
-                if(currentLower === null) return;
+                if (currentLower === null) return;
 
-                if(currentLower.location === 2){ //Lower
-                    const newHeadgear = get().character.headgear;
-                    newHeadgear[2] = 0;
-                    set((state) => ({ character: { ...state.character, headgear: newHeadgear } }));
+                if (currentLower.location === 2) { //Lower
                     set(() => ({ headgear_lower: initialState.headgear_lower }));
-
-                    const currentChar = get().character;
-                    const response = await PostRender(currentChar);
-                    set({ character_url: response });
-                    get().update_object_in_array();
-                    return;
                 }
-                else if(currentLower.location === 4){ //Upper & Lower
-                    const newHeadgear = get().character.headgear;
-                    newHeadgear[0] = 0;
-                    newHeadgear[2] = 0;
-                    set((state) => ({ character: { ...state.character, headgear: newHeadgear } }));
+                if (currentLower.location === 4) { //Upper & Lower
                     set(() => ({ headgear_upper: initialState.headgear_upper }));
                     set(() => ({ headgear_lower: initialState.headgear_lower }));
-
-                    const currentChar = get().character;
-                    const response = await PostRender(currentChar);
-                    set({ character_url: response });
-                    get().update_object_in_array();
-                    return;
                 }
-                else if(currentLower.location === 5){ //Middle & Lower
-                    const newHeadgear = get().character.headgear;
-                    newHeadgear[1] = 0;
-                    newHeadgear[2] = 0;
-                    set((state) => ({ character: { ...state.character, headgear: newHeadgear } }));
+                if (currentLower.location === 5) { //Middle & Lower
                     set(() => ({ headgear_middle: initialState.headgear_middle }));
                     set(() => ({ headgear_lower: initialState.headgear_lower }));
-
-                    const currentChar = get().character;
-                    const response = await PostRender(currentChar);
-                    set({ character_url: response });
-                    get().update_object_in_array();
-                    return;
                 }
-                else if(currentLower.location === 6){ //Upper & Middle & Lower
-                    const newHeadgear = get().character.headgear;
-                    newHeadgear[0] = 0;
-                    newHeadgear[1] = 0;
-                    newHeadgear[2] = 0;
-                    set((state) => ({ character: { ...state.character, headgear: newHeadgear } }));
+                if (currentLower.location === 6) { //Upper & Middle & Lower
                     set(() => ({ headgear_upper: initialState.headgear_upper }));
                     set(() => ({ headgear_middle: initialState.headgear_middle }));
-                    set(() => ({ headgear_lower: initialState.headgear_lower }));
+                    set(() => ({ headgear_lower: initialState.headgear_lower }));                    
+                }
 
-                    const currentChar = get().character;
-                    const response = await PostRender(currentChar);
-                    set({ character_url: response });
-                    get().update_object_in_array();
-                    return;
-                }
-                else {
-                    return;
-                }
+                type Entry = { id: number, priority: number };
+                const entries: Entry[] = SLOT_NAMES.map(slot => {
+                    const model = get()[`headgear_${slot}`] as HeadgearModel | null;
+                    const id = model?.accessoryId ?? 0;
+                    const itemPriority = model !== null ? getPriorityLayer(get()._priorityLayer, model.accessoryId) : null;
+                    return { id, priority: itemPriority !== null ? itemPriority : DEFAULT_PRIORITY[slot] };
+                });
+
+                entries.sort((a, b) => a.priority - b.priority);
+                const headgearPriority = entries.map(e => e.id);
+
+                set(state => ({ character: { ...state.character, headgear: headgearPriority } }));
+
+                const currentChar = get().character;
+                const response = await PostRender(currentChar);
+                set({ character_url: response });
+                get().update_object_in_array();
+                return;
             },
             reset_garment: async () => {
                 set((state) => ({ character: { ...state.character, garment: initialState.character.garment } }));
@@ -881,8 +684,8 @@ export const useStore = create<State>()(
             load_character_modal: async () => {
                 const { characterList } = get();
                 const updated = [...characterList];
-                for(const [index, char] of updated.entries()){
-                    if(char.exist){
+                for (const [index, char] of updated.entries()) {
+                    if (char.exist) {
                         const response = await PostRender(char.character);
                         updated[index].character_url = response;
                     }
@@ -892,7 +695,7 @@ export const useStore = create<State>()(
             download_character_image: () => {
                 const character_url = get().character_url;
                 const name = get().name;
-                if(character_url !== null && name !== null) {
+                if (character_url !== null && name !== null) {
                     const filename = sanitizeStringOutput(name);
                     const a = document.createElement('a');
                     a.href = character_url;
@@ -935,7 +738,7 @@ export const useStore = create<State>()(
                 const { characterList } = get();
                 const idx = characterList.findIndex((x) => x.position === position);
 
-                if(idx >= 0){
+                if (idx >= 0) {
                     set((state) => ({
                         ...state,
                         name: characterList[idx].name,
@@ -956,7 +759,7 @@ export const useStore = create<State>()(
                 const updated = [...characterList];
                 const idx = updated.findIndex((x) => x.position === position);
 
-                if(idx >= 0){
+                if (idx >= 0) {
                     const response = await PostRender(updated[idx].character);
                     updated[idx] = {
                         ...updated[idx],
@@ -972,16 +775,16 @@ export const useStore = create<State>()(
                 const updated = [...characterList];
                 const idx = updated.findIndex((x) => x.position === pos);
 
-                if(idx >= 0){
+                if (idx >= 0) {
                     updated[idx] = {
                         ...initialCharacter,
                         position: pos,
                     };
                     set({ characterList: updated });
 
-                    if(pos === position){
+                    if (pos === position) {
                         const idx2 = updated.findIndex((x) => x.exist);
-                        if(idx2 >= 0){
+                        if (idx2 >= 0) {
                             get().load_character(updated[idx2].position);
                         }
                         else {
@@ -994,7 +797,7 @@ export const useStore = create<State>()(
         {
             name: 'character-storage',
             onRehydrateStorage: () => (state) => {
-                if(state){
+                if (state) {
                     state._hasHydrated = true;
                 }
             },

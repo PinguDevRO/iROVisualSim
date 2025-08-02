@@ -104,6 +104,7 @@ export const third_fourth_job_palette_list = [
     4262,
     4263,
     4264,
+    4279,
     4302,
     4303,
     4304,

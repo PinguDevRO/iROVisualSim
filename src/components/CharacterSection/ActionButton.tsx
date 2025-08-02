@@ -149,10 +149,6 @@ const ActionButton = () => {
             flexDirection="column"
             alignItems="center"
             justifyContent="center"
-            gap={1}
-            sx={{
-                marginTop: { xs: 0, md: 1 }
-            }}
         >
             <Typography
                 variant="body2"

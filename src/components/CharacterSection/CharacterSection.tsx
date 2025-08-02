@@ -11,29 +11,41 @@ import JobSelector from './JobSelector';
 
 const CharacterSection = () => {
     return (
-        <Box display="flex" flexDirection="column" alignItems="center">
+        <Box
+            sx={{
+                display: 'grid',
+                gridTemplateColumns: {
+                    xs: '1fr',
+                    md: '1fr 1fr'
+                },
+                gap: 2,
+                padding: 2
+            }}
+        >
             <Box
-                sx={{
-                    display: 'grid',
-                    gridTemplateColumns: {
-                        xs: '1fr',
-                        md: '1fr 1fr'
-                    },
-                    gap: 2,
-                    padding: 2
-                }}
+                display="flex"
+                flexDirection="column"
+                gap={2}
+                flexGrow={1}
             >
-                <Box display="flex" flexDirection="column" gap={2}>
-                    <JobSelector />
-                    <OutfitMenuList />
-                    <Character />
-                    <ActionMenuList />
+                <JobSelector />
+                <OutfitMenuList />
+                <Character />
+                <ActionMenuList />
+                <Box sx={{ mt: 'auto' }}>
                     <ActionButton />
                 </Box>
-                <Box display="flex" flexDirection="column" gap={2}>
-                    <HairStyleList />
-                    <HairColorList />
-                    <BodyColorList />
+            </Box>
+            <Box
+                display="flex"
+                flexDirection="column"
+                gap={2}
+                flexGrow={1}
+            >
+                <HairStyleList />
+                <HairColorList />
+                <BodyColorList />
+                <Box sx={{ mt: 'auto' }}>
                     <ResetMenuList />
                 </Box>
             </Box>

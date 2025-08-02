@@ -51,8 +51,9 @@ const MainScreen = ({
                     },
                     gap: 2,
                     padding: 2,
+                    alignItems: 'stretch',
+                    height: '100%', 
                     boxSizing: 'border-box',
-                    minWidth: 0,
                     borderRadius: {
                         'xs': 0,
                         'md': 2,
@@ -64,9 +65,11 @@ const MainScreen = ({
                     elevation={3}
                     sx={{
                         display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'stretch',
+                        height: '100%', 
                         padding: 2,
                         borderRadius: 2,
-                        alignItems: 'center',
                         justifyContent: 'center',
                         minWidth: 0,
                         maxWidth: 700
@@ -78,9 +81,11 @@ const MainScreen = ({
                     elevation={3}
                     sx={{
                         display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'stretch',
+                        height: '100%', 
                         padding: 2,
                         borderRadius: 2,
-                        alignItems: 'center',
                         justifyContent: 'center',
                         minWidth: 0,
                         maxWidth: 700

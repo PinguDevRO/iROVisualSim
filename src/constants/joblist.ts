@@ -376,6 +376,13 @@ export const special_job = [
     },
 ];
 
+export const madogear_job = [
+    4064,
+    4087,
+    4253,
+    4279,
+];
+
 export const regular_mount_list: { [key: number]: number } = {
     7: 13,
     14: 21,

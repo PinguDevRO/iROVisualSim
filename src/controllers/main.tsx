@@ -3,9 +3,11 @@
 import { useEffect, useState, useRef } from "react";
 import HeadgearToModel, { HeadgearModel } from "@/models/get-headgear";
 import GarmentToModel, { GarmentModel } from "@/models/get-garment";
+import PriorityLayerToModel, { PriorityLayerModel } from "@/models/get-prioritylayer";
 
 import GetHeadgears from "@/services/get-headgear";
 import GetGarments from "@/services/get-garment";
+import GetPriorityLayer from "@/services/get-prioritylayer";
 import PostRender from "@/services/post-render";
 
 import MainScreen from "@/screens/MainScreen";
@@ -16,9 +18,10 @@ export interface EndpointStatus {
     error: boolean;
 };
 
-export type EndpointName = "getHeadgearData" | "getGarmentData" | "postRenderData";
+export type EndpointName = "getHeadgearData" | "getGarmentData" | "getPriorityLayer" | "postRenderData";
 
 export interface Model {
+    priorityLayerData: PriorityLayerModel | undefined;
     headgearData: HeadgearModel[] | undefined;
     garmentData: GarmentModel[] | undefined;
     lastUpdate: Date | undefined;
@@ -31,11 +34,13 @@ const MainController = () => {
 
     const character = useStore((x) => x.character);
     const setCharacterUrl = useStore((x) => x.update_char_url);
+    const setPriorityLayer = useStore((x) => x.update_priority_layer);
 
     const hasHydrated = useStore((x) => x._hasHydrated);
     const hasBeenInitialized = useRef<boolean>(false);
 
     useEffect(() => {
+        loadPriorityLayerData();
         loadHeadgearData();
         loadGarmentData();
     }, []);
@@ -114,6 +119,22 @@ const MainController = () => {
         } catch {
             statusEndpoint.error();
             updateModel({ garmentData: undefined });
+        } finally {
+            statusEndpoint.done();
+        }
+    };
+
+    const loadPriorityLayerData = async () => {
+        const statusEndpoint = buildStatusEndpoint("getPriorityLayer");
+        try {
+            statusEndpoint.loading();
+            const response = await GetPriorityLayer();
+            const priorityLayerData = response !== null ? PriorityLayerToModel(response) : undefined;
+            setPriorityLayer(priorityLayerData);
+            updateModel({ priorityLayerData });
+        } catch {
+            statusEndpoint.error();
+            updateModel({ priorityLayerData: undefined });
         } finally {
             statusEndpoint.done();
         }
