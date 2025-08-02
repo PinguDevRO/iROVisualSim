@@ -425,6 +425,20 @@ export const cash_mount_list: { [key: number]: number } = {
     4258: 4281,
 };
 
+export const get_base_job_mount = (val: number): number => {
+    for (const [strKey, value] of Object.entries(regular_mount_list)) {
+        const key = Number(strKey);
+        if (val === key) {
+            return key;
+        }
+
+        if (val === value) {
+            return key;
+        }
+    };
+    return val;
+};
+
 export const get_key_from_mount = (val: number): number => {
     for (const [strKey, value] of Object.entries(regular_mount_list)) {
         const key = Number(strKey);
@@ -433,7 +447,7 @@ export const get_key_from_mount = (val: number): number => {
         }
     };
     return -1;
-}
+};
 
 export const get_jobname_by_id = (id: number): string => {
     const merged = [...novice_job, ...first_job, ...second_job, ...transcendence_job, ...third_job, ...fourth_job, ...expanded_first_job, ...expanded_second_job, ...expanded_third_job, ...expanded_fourth_job];

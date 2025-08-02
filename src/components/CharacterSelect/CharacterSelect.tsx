@@ -6,7 +6,7 @@ import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import { get_jobname_by_id } from '@/constants/joblist';
+import { get_jobname_by_id, get_base_job_mount } from '@/constants/joblist';
 import { SxProps } from '@mui/material';
 import { useStore, Character } from '@/store/useStore';
 
@@ -313,7 +313,7 @@ const CharacterSelect = () => {
                                             loading="eager"
                                         />
                                         <Image
-                                            src={`/job/icon_jobs_${val.character.job[0]}.png`}
+                                            src={`/job/icon_jobs_${get_base_job_mount(Number(val.character.job[0]))}.png`}
                                             alt={`char select ${idx + 1}`}
                                             width={25}
                                             height={25}

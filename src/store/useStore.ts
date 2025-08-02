@@ -120,7 +120,7 @@ export const initialCharacter: Character = {
         headdir: 0,
         headgear: [0, 0, 0],
         garment: 0,
-        bodyPalette: 0,
+        bodyPalette: -1,
         madogearType: 0,
         action: 0,
         canvas: "200x200+100+150",
@@ -154,7 +154,7 @@ export const initialState = {
         headdir: 0,
         headgear: [0, 0, 0],
         garment: 0,
-        bodyPalette: 0,
+        bodyPalette: -1,
         madogearType: 0,
         action: 0,
         canvas: "200x200+100+150",
@@ -402,7 +402,15 @@ export const useStore = create<State>()(
                 get().update_object_in_array();
             },
             update_char_bodyPalette: async (bodyPalette: number) => {
-                set((state) => ({ character: { ...state.character, bodyPalette } }));
+                const currentBodyPalette = get().character.bodyPalette;
+                if(currentBodyPalette === bodyPalette) {
+                    set((state) => ({ character: { ...state.character, bodyPalette: -1 } }));
+                }
+
+                if(currentBodyPalette !== bodyPalette) {
+                    set((state) => ({ character: { ...state.character, bodyPalette } }));
+                }
+
                 const currentChar = get().character;
                 const response = await PostRender(currentChar);
                 set({ character_url: response });
