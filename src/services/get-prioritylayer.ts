@@ -15,7 +15,7 @@ export interface GetPriorityLayerResponse {
 
 const GetPriorityLayer = async (): Promise<GetPriorityLayerResponse |  null> => {
     const url = process.env.NEXT_PUBLIC_IROWIKI_PRIORITYLAYER_METADATA_URL ? process.env.NEXT_PUBLIC_IROWIKI_PRIORITYLAYER_METADATA_URL : "";
-    const response: AxiosResponse<GetPriorityLayerResponse | null> = await AxiosGet(url);
+    const response: AxiosResponse<GetPriorityLayerResponse | null> = await AxiosGet(`${url}?cache_bust=${Date.now()}`);
     if(response.status === 200){
         return response.data;
     }

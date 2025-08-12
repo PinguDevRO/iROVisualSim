@@ -11,7 +11,7 @@ export interface GetGarmentResponse {
 
 const GetGarments = async (): Promise<GetGarmentResponse[] |  null> => {
     const url = process.env.NEXT_PUBLIC_IROWIKI_GARMENT_METADATA_URL ? process.env.NEXT_PUBLIC_IROWIKI_GARMENT_METADATA_URL : "";
-    const response: AxiosResponse<GetGarmentResponse[] | null> = await AxiosGet(url);
+    const response: AxiosResponse<GetGarmentResponse[] | null> = await AxiosGet(`${url}?cache_bust=${Date.now()}`);
     if(response.status === 200){
         return response.data;
     }

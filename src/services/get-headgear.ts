@@ -12,7 +12,7 @@ export interface GetHeadgearResponse {
 
 const GetHeadgears = async (): Promise<GetHeadgearResponse[] |  null> => {
     const url = process.env.NEXT_PUBLIC_IROWIKI_HEADGEAR_METADATA_URL ? process.env.NEXT_PUBLIC_IROWIKI_HEADGEAR_METADATA_URL : "";
-    const response: AxiosResponse<GetHeadgearResponse[] | null> = await AxiosGet(url);
+    const response: AxiosResponse<GetHeadgearResponse[] | null> = await AxiosGet(`${url}?cache_bust=${Date.now()}`);
     if(response.status === 200){
         return response.data;
     }
